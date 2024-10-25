@@ -11,7 +11,7 @@ const Blog = () => {
       <main className="blog-page">
         <section className="news-section">
           <div className="container">
-            <h2 className="main-title">Tin tức - sự kiện</h2>
+            <h2 className="main-title">Tổng Hợp Các Blog Làm Đẹp Nổi Bật</h2>
             <div className="news-list">
               <div className="row">
                 <div className="col-md-6 col-lg-4 item">

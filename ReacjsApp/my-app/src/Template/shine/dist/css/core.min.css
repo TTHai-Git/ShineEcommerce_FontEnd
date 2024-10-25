@@ -187,7 +187,7 @@ abbr[title] {
   -webkit-text-decoration-skip-ink: none;
   cursor: help;
   border-bottom: 0;
-  text-decoration: underline;
+  /* text-decoration: underline; */
   text-decoration: underline dotted;
   text-decoration-skip-ink: none;
 }
@@ -289,7 +289,7 @@ pre {
 }
 
 figure {
-  margin: 0;
+  margin: 50;
 }
 
 img {
@@ -4200,7 +4200,7 @@ body.compensate-for-scrollbar {
 
 .fancybox-caption a:hover {
   color: #fff;
-  text-decoration: underline;
+  /* text-decoration: underline; */
 }
 
 .fancybox-loading {

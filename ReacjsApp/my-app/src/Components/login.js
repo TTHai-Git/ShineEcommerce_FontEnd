@@ -1,27 +1,49 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
+import { redirect, useNavigate } from "react-router-dom";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { MyDispatchContext, MyUserContext } from "../Config/contexts";
+import ax, { authApi, endpoints } from "../Config/APIs";
 import "../Template/shine/dist/css/core.min.css";
 import "../Template/shine/dist/css/main.min.css";
-import "../Template/shine/dist/css/main.min.css.map";
+import APIs from "../Config/APIs";
 
 function Login() {
   const [isRegisterOpen, setRegisterOpen] = useState(false);
-  const [formData, setFormData] = useState({
-    username: "",
-    password: "",
-    remember: false,
-  });
+  const [user, setUser] = useState({ username: "", password: "" });
+  const [loading, setLoading] = useState(false);
+  const { dispatch } = useContext(MyUserContext);
+  const navigate = useNavigate();
 
-  const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: type === "checkbox" ? checked : value,
-    }));
+  const updateState = (e) => {
+    const { name, value } = e.target;
+    setUser((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    console.log("Login data:", formData);
+    try {
+      setLoading(true);
+      const res = await APIs.post(endpoints["login"], {
+        ...user,
+        client_id: "UCMKUhRjIgkzAnQVZjDRkDTNe0WdjhPDO3pF3wn7",
+        client_secret:
+          "xgPNNlVNFmrXCIzhwihWXS6HuWH2MROKz1lQ9VkiDTl6FqahPa0uuQ368uWp8igtiR0IXIjYsTBXWxr4uJf8I58znouvLXKjEVPcJeEWb97tryN8bV7WXYbcih9alhAG",
+        grant_type: "password",
+      });
+
+      const accessToken = res.data.access_token;
+      await AsyncStorage.setItem("token", accessToken);
+
+      const userRes = await authApi(accessToken).get(endpoints["current-user"]);
+      const userData = { ...userRes.data, access_token: accessToken };
+      dispatch({ type: "login", payload: userData });
+      navigate("/");
+    } catch (error) {
+      console.error("Login failed:", error);
+      window.alert("Đăng nhập thất bại. Vui lòng thử lại!");
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleRegisterToggle = () => {
@@ -43,8 +65,8 @@ function Login() {
                   type="text"
                   name="username"
                   placeholder="Tài khoản"
-                  value={formData.username}
-                  onChange={handleChange}
+                  value={user.username}
+                  onChange={updateState}
                 />
               </div>
               <div className="form-group">
@@ -55,19 +77,9 @@ function Login() {
                   type="password"
                   name="password"
                   placeholder="Mật khẩu"
-                  value={formData.password}
-                  onChange={handleChange}
+                  value={user.password}
+                  onChange={updateState}
                 />
-              </div>
-              <div className="form-check">
-                <input
-                  type="checkbox"
-                  name="remember"
-                  id="saveAccount"
-                  checked={formData.remember}
-                  onChange={handleChange}
-                />
-                <label htmlFor="saveAccount">Lưu tài khoản</label>
               </div>
               <div className="form-group">
                 <p>Đăng nhập bằng Facebook hoặc Google tại đây</p>
@@ -85,15 +97,7 @@ function Login() {
         </div>
       </section>
 
-      {/* Register Modal */}
-      {isRegisterOpen && (
-        <div className="dk-wrapper" id="creat">
-          <h2 className="main-title">Đăng ký</h2>
-          <RegisterForm onClose={handleRegisterToggle} />
-        </div>
-      )}
-
-      <Newsletter />
+      {isRegisterOpen && <RegisterModal onClose={handleRegisterToggle} />}
 
       <div id="phoneButton">
         <a href="#">
@@ -105,8 +109,7 @@ function Login() {
   );
 }
 
-// Register Form Component
-function RegisterForm({ onClose }) {
+function RegisterModal({ onClose }) {
   const [registerData, setRegisterData] = useState({
     fullname: "",
     email: "",
@@ -122,90 +125,64 @@ function RegisterForm({ onClose }) {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log("Register data:", registerData);
-    onClose(); // Close the register modal after submission
+    onClose(); // Close the modal after submission
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <div className="formWrapper">
-        <div className="form-group">
-          <label>
-            Họ và tên<span>*</span>
-          </label>
-          <input
-            type="text"
-            name="fullname"
-            value={registerData.fullname}
-            onChange={handleChange}
-          />
-        </div>
-        <div className="form-group">
-          <label>
-            Email<span>*</span>
-          </label>
-          <input
-            type="email"
-            name="email"
-            value={registerData.email}
-            onChange={handleChange}
-          />
-        </div>
-        <div className="form-group">
-          <label>
-            Mật khẩu<span>*</span>
-          </label>
-          <input
-            type="password"
-            name="password"
-            value={registerData.password}
-            onChange={handleChange}
-          />
-        </div>
-        <div className="form-group">
-          <label>
-            Nhập lại mật khẩu<span>*</span>
-          </label>
-          <input
-            type="password"
-            name="confirmPassword"
-            value={registerData.confirmPassword}
-            onChange={handleChange}
-          />
-        </div>
-        <div className="form-btn">
-          <button type="submit">Đăng ký</button>
-        </div>
-      </div>
-    </form>
-  );
-}
-
-// Newsletter Component
-function Newsletter() {
-  return (
-    <section className="newsletter py-3">
-      <div className="container">
-        <div className="row">
-          <div className="col-lg-5">
-            <div className="heading-wrapper">
-              <div className="ic">
-                <img src="./img/img-3.png" alt="Newsletter" />
-              </div>
-              <div className="text">
-                <h3>Đăng ký nhận bản tin</h3>
-                <p>Đăng ký ngay để nhận thông tin khuyến mãi mới nhất</p>
-              </div>
-            </div>
+    <div className="dk-wrapper">
+      <h2 className="main-title">Đăng ký</h2>
+      <form onSubmit={handleSubmit}>
+        <div className="formWrapper">
+          <div className="form-group">
+            <label>
+              Họ và tên<span>*</span>
+            </label>
+            <input
+              type="text"
+              name="fullname"
+              value={registerData.fullname}
+              onChange={handleChange}
+            />
           </div>
-          <div className="col-lg-6">
-            <div className="form-wrapper">
-              <input type="text" placeholder="Nhập địa chỉ email" />
-              <button type="submit">Đăng ký</button>
-            </div>
+          <div className="form-group">
+            <label>
+              Email<span>*</span>
+            </label>
+            <input
+              type="email"
+              name="email"
+              value={registerData.email}
+              onChange={handleChange}
+            />
+          </div>
+          <div className="form-group">
+            <label>
+              Mật khẩu<span>*</span>
+            </label>
+            <input
+              type="password"
+              name="password"
+              value={registerData.password}
+              onChange={handleChange}
+            />
+          </div>
+          <div className="form-group">
+            <label>
+              Nhập lại mật khẩu<span>*</span>
+            </label>
+            <input
+              type="password"
+              name="confirmPassword"
+              value={registerData.confirmPassword}
+              onChange={handleChange}
+            />
+          </div>
+          <div className="form-btn">
+            <button type="submit">Đăng ký</button>
           </div>
         </div>
-      </div>
-    </section>
+      </form>
+    </div>
   );
 }
 
