@@ -62,7 +62,7 @@ const ListProduct = () => {
         if (max_price !== null) url += `max_price=${max_price}&`;
       }
 
-      if (sortOrder) {
+      if (sortOrder && sortOrder !== "") {
         url += `sort_order=${sortOrder}&`; // Add sort parameter
       }
 
@@ -239,9 +239,10 @@ const ProductList = ({ products, titleCategory, onOrderSortChange }) => (
       <h1 className="shine-title">{titleCategory}</h1>
       <div className="sort-by">
         <select onChange={(e) => onOrderSortChange(e.target.value)}>
+          <option value=""></option>
+          <option value="new">Mới nhất</option>
           <option value="desc">Giá giảm dần</option>
           <option value="asc">Giá tăng dần</option>
-          <option value="new">Mới nhất</option>
         </select>
       </div>
     </div>
