@@ -49,6 +49,7 @@
     ]
   },
   "devDependencies": {
+    "dotenv-webpack": "^8.1.0",
     "react-router-dom": "^6.27.0"
   }
 }

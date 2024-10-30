@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import "../Template/shine/dist/css/core.min.css";
 import "../Template/shine/dist/css/main.min.css";
 import "../Template/shine/dist/css/main.min.css.map";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import APIs, { endpoints } from "../Config/APIs";
 import banner_1 from "../Template/shine/dist/img/home/banner-1.png";
 import banner_2 from "../Template/shine/dist/img/home/banner-2.png";
@@ -41,15 +41,20 @@ const ListProduct = () => {
   const [selectedPrice, setSelectedPrice] = useState("Tất Cả");
   const [selectedOrigin, setSelectedOrigin] = useState("Tất Cả");
   const [sortOrder, setSortOrder] = useState("");
+  const navigate = useNavigate();
 
   // Load products based on category ID
   const loadProductsByCategory = async () => {
     try {
-      let url = `${endpoints["load-list-product"](category_id)}?`;
+      // Start building the URL
+      let url = `${endpoints["load-list-product"](category_id)}`;
+
+      // Create a URLSearchParams object to handle query parameters
+      const params = new URLSearchParams();
 
       // Append origin filter if provided
       if (selectedOrigin && selectedOrigin !== "Tất Cả") {
-        url += `origin=${selectedOrigin}&`;
+        params.append("origin", selectedOrigin);
       }
 
       // Handle price filter
@@ -58,16 +63,22 @@ const ListProduct = () => {
         const min_price = parseCurrency(minPriceStr);
         const max_price = maxPriceStr ? parseCurrency(maxPriceStr) : null;
 
-        if (min_price) url += `min_price=${min_price}&`;
-        if (max_price !== null) url += `max_price=${max_price}&`;
+        if (min_price) params.append("min_price", min_price);
+        if (max_price !== null) params.append("max_price", max_price);
       }
 
+      // Append sort order if provided
       if (sortOrder && sortOrder !== "") {
-        url += `sort_order=${sortOrder}&`; // Add sort parameter
+        params.append("sort_order", sortOrder);
       }
+
+      // Combine base URL with query parameters
+      url += `?${params.toString()}`;
+      console.log(url); // Log the final URL
 
       // Fetch data from API
       const res = await APIs.get(url);
+      navigate(`/categories/${category_id}/list-product?${params.toString()}`);
       const products = res.data.results || [];
 
       setProductsByCategory(products);

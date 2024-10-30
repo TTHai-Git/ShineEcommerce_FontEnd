@@ -13,6 +13,8 @@ function Login() {
   const [loading, setLoading] = useState(false);
   const { dispatch } = useContext(MyUserContext);
   const navigate = useNavigate();
+  // const CLIENT_ID_HAI = process.env.CLIENT_ID_HAI;
+  // const CLIENT_SECRET_HAI = process.env.CLIENT_SECRET_HAI;
 
   const updateState = (e) => {
     const { name, value } = e.target;
@@ -29,6 +31,11 @@ function Login() {
         client_secret:
           "xgPNNlVNFmrXCIzhwihWXS6HuWH2MROKz1lQ9VkiDTl6FqahPa0uuQ368uWp8igtiR0IXIjYsTBXWxr4uJf8I58znouvLXKjEVPcJeEWb97tryN8bV7WXYbcih9alhAG",
         grant_type: "password",
+
+        // ...user,
+        // client_id: CLIENT_ID_HAI,
+        // client_secret: CLIENT_SECRET_HAI,
+        // grant_type: "password",
       });
 
       const accessToken = res.data.access_token;
