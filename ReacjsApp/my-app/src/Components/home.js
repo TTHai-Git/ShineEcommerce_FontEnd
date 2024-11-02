@@ -150,42 +150,38 @@ function Home() {
   );
 
   const BlogTopItem = ({ blog }) => (
-    <div className="col-lg-6">
-      <div className="blog-item top-item">
-        <a href="#">
-          <figure>
-            <div className="image">
-              <img src={blog.blog_image} alt={blog.blog_title} />
-            </div>
-            <figcaption>
-              <time>
-                {moment(blog.blog_created_date).locale("vi", vi).fromNow()}
-              </time>
-              <h5 className="title">{blog.blog_title}</h5>
-            </figcaption>
-          </figure>
-        </a>
-      </div>
+    <div className="blog-item top-item">
+      <a href="#">
+        <figure>
+          <div className="image">
+            <img src={blog.blog_image} alt={blog.blog_title} />
+          </div>
+          <figcaption>
+            <time>
+              {moment(blog.blog_created_date).locale("vi", vi).fromNow()}
+            </time>
+            <h5 className="title">{blog.blog_title}</h5>
+          </figcaption>
+        </figure>
+      </a>
     </div>
   );
 
   const BlogPartItem = ({ blog }) => (
-    <div className="col-lg-6">
-      <div className="blog-item part-item">
-        <a href="#">
-          <figure>
-            <div className="image">
-              <img src={blog.blog_image} alt={blog.blog_title} />
-            </div>
-            <figcaption>
-              <time>
-                {moment(blog.blog_created_date).locale("vi", vi).fromNow()}
-              </time>
-              <h5 className="title">{blog.blog_title}</h5>
-            </figcaption>
-          </figure>
-        </a>
-      </div>
+    <div className="blog-item part-item">
+      <a href="#">
+        <figure>
+          <div className="image">
+            <img src={blog.blog_image} alt={blog.blog_title} />
+          </div>
+          <figcaption>
+            <time>
+              {moment(blog.blog_created_date).locale("vi", vi).fromNow()}
+            </time>
+            <h5 className="title">{blog.blog_title}</h5>
+          </figcaption>
+        </figure>
+      </a>
     </div>
   );
 
@@ -200,12 +196,12 @@ function Home() {
 
   const renderTopNewBlogs = () =>
     newBlogs
-      .filter((newBlog) => newBlog.blog_id % 2 === 0)
+      .filter((newBlog) => newBlog.blog_id === newBlogs.length - 1)
       .map((newBlog) => <BlogTopItem blog={newBlog} key={newBlog.blog_id} />);
 
   const renderPartNewBlogs = () =>
     newBlogs
-      .filter((newBlog) => newBlog.blog_id % 2 !== 0)
+      .filter((newBlog) => newBlog.blog_id !== newBlogs.length - 1)
       .map((newBlog) => <BlogPartItem blog={newBlog} key={newBlog.blog_id} />);
 
   const renderProductsByCategory = (categoryName) =>
@@ -293,7 +289,7 @@ function Home() {
           <div className="heading-wrapper">
             <h2 className="shine-title">Blog Làm Đẹp Mới Nhất</h2>
             <div className="button">
-              <Link className="view-more-button" to="/blog">
+              <Link className="view-more-button" to="/blogs">
                 Xem thêm
               </Link>
             </div>

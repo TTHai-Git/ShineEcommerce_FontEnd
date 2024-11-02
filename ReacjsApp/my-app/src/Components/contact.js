@@ -1,9 +1,35 @@
-import React from "react";
+import React, { useRef } from "react";
+import emailjs from "@emailjs/browser";
 import "../Template/shine/dist/css/core.min.css";
 import "../Template/shine/dist/css/main.min.css";
-import "../Template/shine/dist/css/main.min.css.map";
 
 const Contact = () => {
+  const form = useRef();
+
+  const sendEmail = (e) => {
+    e.preventDefault();
+
+    emailjs
+      .sendForm(
+        "service_9wq0b5h",
+        "template_ckz0s24",
+        form.current,
+        "3hgF_CW3OyMYnhi2-"
+      )
+      .then(
+        () => {
+          console.log("SUCCESS!");
+          alert(
+            "Thành Công",
+            "Mail của bạn đã được gửi tới quản trị viên hệ thống thành công!"
+          );
+        },
+        (error) => {
+          console.log("FAILED...", error.text);
+        }
+      );
+  };
+
   return (
     <main>
       <section className="contact main-section">
@@ -11,39 +37,28 @@ const Contact = () => {
           <h2 className="main-title">Liên hệ</h2>
           <div className="content-section">
             <p>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Soluta
-              quis nisi facere quibusdam ipsam. Exercitationem, culpa deleniti
-              tempora rem cum minima obcaecati alias sequi ullam? Mollitia
-              delectus error quaerat laudantium.
+              Hãy gửi các phản hồi bất kỳ vấn đề nào về cho chúng tôi để mang
+              lại cho bạn trải nghiệm tốt nhất
             </p>
           </div>
-          <form>
+          <form ref={form} onSubmit={sendEmail}>
             <div className="form-wrapper">
               {[
-                "Họ và tên",
-                "Email",
-                "Số điện thoại",
-                "Tiêu đề",
-                "Nội dung",
-              ].map((label, index) => (
+                { label: "Họ và tên", type: "text", name: "user_name" },
+                { label: "Email", type: "email", name: "user_email" },
+                { label: "Số điện thoại", type: "tel", name: "user_phone" },
+                { label: "Tiêu đề", type: "text", name: "subject" },
+                { label: "Nội dung", type: "textarea", name: "descriptions" },
+              ].map((field, index) => (
                 <div className="form-group" key={index}>
                   <label>
-                    {label}
+                    {field.label}
                     <span>*</span>
                   </label>
-                  {label === "Nội dung" ? (
-                    <textarea rows="10" cols="30" required />
+                  {field.type === "textarea" ? (
+                    <textarea name={field.name} rows="10" cols="30" required />
                   ) : (
-                    <input
-                      type={
-                        label === "Email"
-                          ? "email"
-                          : label === "Số điện thoại"
-                          ? "number"
-                          : "text"
-                      }
-                      required
-                    />
+                    <input type={field.type} name={field.name} required />
                   )}
                 </div>
               ))}

@@ -51,128 +51,130 @@ function Footer() {
           </div>
         </div>
       </section>
-      <div className="container">
-        <div className="top-wrapper">
-          <div className="row">
-            {/* Contact Section */}
-            <div className="col-lg-3 col-md-6 ft-col">
-              <div className="text-wrap">
-                <h4>Liên hệ</h4>
-                <p>
-                  <em className="mdi mdi-map-marker"></em> 198 Hoàng Văn Thụ,
-                  Phường 9, Quận Phú Nhuận, TP. HCM
-                </p>
-                <p>
-                  <em className="mdi mdi-phone"></em> 0915 948 855 - 0961 324
-                  950
-                </p>
-                <p>
-                  <em className="mdi mdi-email"></em> cskh@khakim.com
-                </p>
+      <footer>
+        <div className="container">
+          <div className="top-wrapper">
+            <div className="row">
+              {/* Contact Section */}
+              <div className="col-lg-3 col-md-6 ft-col">
+                <div className="text-wrap">
+                  <h4>Liên hệ</h4>
+                  <p>
+                    <em className="mdi mdi-map-marker"></em> 198 Hoàng Văn Thụ,
+                    Phường 9, Quận Phú Nhuận, TP. HCM
+                  </p>
+                  <p>
+                    <em className="mdi mdi-phone"></em> 0915 948 855 - 0961 324
+                    950
+                  </p>
+                  <p>
+                    <em className="mdi mdi-email"></em> cskh@khakim.com
+                  </p>
+                </div>
               </div>
-            </div>
 
-            {/* Quick Links Section */}
-            <div className="col-lg-3 col-md-6 ft-col">
-              <div className="text-wrap">
-                <h4>Liên kết nhanh</h4>
-                <ul>
-                  {[
-                    "Thông tin công ty",
-                    "Blog làm đẹp",
-                    "Hỗ trợ khách hàng",
-                    "Tuyển dụng",
-                    "Liên hệ",
-                  ].map((item, index) => (
-                    <li key={index}>
-                      <a href="#">{item}</a>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-
-            {/* Customer Support Section */}
-            <div className="col-lg-3 col-md-6 ft-col">
-              <div className="text-wrap">
-                <h4>Hỗ trợ khách hàng</h4>
-                <ul>
-                  {[
-                    "Theo dõi đơn hàng",
-                    "Hướng dẫn mua hàng",
-                    "Chính sách mua hàng",
-                    "Chính sách đổi trả, hoàn tiền",
-                    "Chính sách bảo mật",
-                    "Quy chế hoạt động",
-                  ].map((item, index) => (
-                    <li key={index}>
-                      <a href="#">{item}</a>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-
-            {/* Social Links Section */}
-            <div className="col-lg-3 col-md-6 ft-col">
-              <div className="text-wrap social">
-                <h4>Kết nối với chúng tôi</h4>
-                <ul>
-                  {["facebook", "youtube-play", "twitter", "instagram"].map(
-                    (platform, index) => (
+              {/* Quick Links Section */}
+              <div className="col-lg-3 col-md-6 ft-col">
+                <div className="text-wrap">
+                  <h4>Liên kết nhanh</h4>
+                  <ul>
+                    {[
+                      "Thông tin công ty",
+                      "Blog làm đẹp",
+                      "Hỗ trợ khách hàng",
+                      "Tuyển dụng",
+                      "Liên hệ",
+                    ].map((item, index) => (
                       <li key={index}>
-                        <a href="#">
-                          <em className={`fa fa-${platform}`}></em>
-                        </a>
+                        <a href="#">{item}</a>
                       </li>
-                    )
-                  )}
-                </ul>
-                <div className="certification">
-                  <img src={cer_img} alt="Certification" />
+                    ))}
+                  </ul>
+                </div>
+              </div>
+
+              {/* Customer Support Section */}
+              <div className="col-lg-3 col-md-6 ft-col">
+                <div className="text-wrap">
+                  <h4>Hỗ trợ khách hàng</h4>
+                  <ul>
+                    {[
+                      "Theo dõi đơn hàng",
+                      "Hướng dẫn mua hàng",
+                      "Chính sách mua hàng",
+                      "Chính sách đổi trả, hoàn tiền",
+                      "Chính sách bảo mật",
+                      "Quy chế hoạt động",
+                    ].map((item, index) => (
+                      <li key={index}>
+                        <a href="#">{item}</a>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+
+              {/* Social Links Section */}
+              <div className="col-lg-3 col-md-6 ft-col">
+                <div className="text-wrap social">
+                  <h4>Kết nối với chúng tôi</h4>
+                  <ul>
+                    {["facebook", "youtube-play", "twitter", "instagram"].map(
+                      (platform, index) => (
+                        <li key={index}>
+                          <a href="#">
+                            <em className={`fa fa-${platform}`}></em>
+                          </a>
+                        </li>
+                      )
+                    )}
+                  </ul>
+                  <div className="certification">
+                    <img src={cer_img} alt="Certification" />
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
 
-        {/* Bottom Section */}
-        <div className="bottom-wrapper">
-          <div className="copyright">
-            <p>
-              2019 © The Shine Shop.
-              <a
-                href="https://www.canhcam.vn/thiet-ke-website"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                {" "}
-                Thiết kế website{" "}
-              </a>{" "}
-              bởi
-              <a
-                href="https://www.canhcam.vn"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                {" "}
-                Cánh Cam
-              </a>
-              .
-            </p>
-          </div>
-          <div className="sub-list">
-            <ul>
-              <li>
-                <a href="#">Điều khoản sử dụng</a>
-              </li>
-              <li>
-                <a href="#">Chính sách bảo mật</a>
-              </li>
-            </ul>
+          {/* Bottom Section */}
+          <div className="bottom-wrapper">
+            <div className="copyright">
+              <p>
+                2019 © The Shine Shop.
+                <a
+                  href="https://www.canhcam.vn/thiet-ke-website"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {" "}
+                  Thiết kế website{" "}
+                </a>{" "}
+                bởi
+                <a
+                  href="https://www.canhcam.vn"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {" "}
+                  Cánh Cam
+                </a>
+                .
+              </p>
+            </div>
+            <div className="sub-list">
+              <ul>
+                <li>
+                  <a href="#">Điều khoản sử dụng</a>
+                </li>
+                <li>
+                  <a href="#">Chính sách bảo mật</a>
+                </li>
+              </ul>
+            </div>
           </div>
         </div>
-      </div>
+      </footer>
     </div>
   );
 }

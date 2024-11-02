@@ -7,31 +7,15 @@ export const endpoints = {
   "load-product-home": "products/load-product-home/",
   "load-category": "categories/",
   "load-tag": "tags/",
-  "load-new-blogs": "notifications/load-new-blogs/",
+  "load-new-blogs": "blogs/load-new-blogs/",
+  "load-blog-info-detail": (blog_id) => `blogs/${blog_id}/info-details`,
   "load-list-product": (category_id) =>
     `categories/${category_id}/list-product`,
   "current-user": "/users/current-user/",
   "product-info-details": (product_id) => `products/${product_id}/info-details`,
   "load-all-origins": "origins/",
+  register: "/users/",
 };
-
-// const ax = axios.create({
-//   baseURL: BASE_URL,
-//   headers: {
-//     "content-type": "application/json",
-//   },
-//   timeout: 0,
-//   withCredentials: false,
-// });
-
-// export const authApi = (accessToken) =>
-//   axios.create({
-//     baseURL: BASE_URL,
-//     headers: {
-//       Authorization: `Bearer ${accessToken}`,
-//     },
-//   });
-// export default ax;
 
 export const authApi = (accessToken) =>
   axios.create({

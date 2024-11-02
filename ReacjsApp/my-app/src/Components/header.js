@@ -16,8 +16,9 @@ import { logOut } from "../Config/reducers";
 function Header() {
   const user = useContext(MyUserContext);
   const dispatch = useContext(MyDispatchContext);
+  useEffect(() => {}, [user.user]);
   return (
-    <div className="home-page">
+    <body className="home-page">
       <header className="semi">
         <div className="container">
           <div className="backdrop-wrapper"></div>
@@ -63,11 +64,7 @@ function Header() {
                         Chào, {user.user.last_name} {user.user.first_name}
                       </span>
                       <ul className="nav-user">
-                        <li>
-                          <Link to="/" onProgress={() => logOut(dispatch)}>
-                            Thoát
-                          </Link>
-                        </li>
+                        <li onClick={() => logOut(dispatch)}>Thoát</li>
                       </ul>
                     </>
                   ) : (
@@ -81,10 +78,7 @@ function Header() {
                           <Link to="/login">Đăng Nhập</Link>
                         </li>
                         <li>
-                          <Link to="/login">Đăng Ký</Link>
-                        </li>
-                        <li>
-                          <a href="#">Thoát</a>
+                          <Link to="/register">Đăng Ký</Link>
                         </li>
                       </ul>
                     </>
@@ -154,7 +148,7 @@ function Header() {
                   <Link to="/about">Thông Tin Công Ty</Link>
                 </li>
                 <li>
-                  <Link to="/blog">Blog làm đẹp</Link>
+                  <Link to="/blogs">Blog làm đẹp</Link>
                 </li>
                 <li>
                   <Link to="/contact">Hỗ Trợ Khách Hàng</Link>
@@ -171,7 +165,7 @@ function Header() {
           </div>
         </div>
       </header>
-    </div>
+    </body>
   );
 }
 
