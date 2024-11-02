@@ -112,7 +112,7 @@ function Home() {
             </a>
             <Link
               className="view-detail"
-              to={`products/${product.id_product}/info-details`}
+              to={`/products/${product.id_product}/info-details`}
               aria-label="View details"
             >
               <FaEye />

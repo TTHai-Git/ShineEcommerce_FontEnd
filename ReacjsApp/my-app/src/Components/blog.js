@@ -55,24 +55,22 @@ const Blog = () => {
   );
 
   return (
-    <body className="thanh-toan-page">
-      <main>
-        <section className="tin-tuc main-section">
-          <div className="container">
-            <h2 className="main-title">Tổng Hợp Các Blog Làm Đẹp Nổi Bật</h2>
-            <div className="news-list">
-              <div className="row">
-                {blogs.map((blog) => (
-                  <div className="col-md-6 col-lg-4 item" key={blog.id}>
-                    <BlogItem blog={blog} />
-                  </div>
-                ))}
-              </div>
+    <main>
+      <section className="tin-tuc main-section">
+        <div className="container">
+          <h2 className="main-title">Tổng Hợp Các Blog Làm Đẹp Nổi Bật</h2>
+          <div className="news-list">
+            <div className="row">
+              {blogs.map((blog) => (
+                <div className="col-md-6 col-lg-4 item" key={blog.id}>
+                  <BlogItem blog={blog} />
+                </div>
+              ))}
             </div>
           </div>
-        </section>
-      </main>
-    </body>
+        </div>
+      </section>
+    </main>
   );
 };
 

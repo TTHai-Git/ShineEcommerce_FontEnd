@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import APIs, { endpoints } from "../Config/APIs";
 import moment from "moment";
 import "moment/locale/vi";
@@ -51,7 +51,7 @@ const BlogDetail = () => {
 
   const BlogsRelatedItem = ({ blog }) => (
     <div className="col-sm-6 col-lg-12 news-other-item" key={blog?.blog_id}>
-      <a href="#">
+      <Link to={`/blogs/${blog.blog_id}/info-details`}>
         <figure>
           <div className="image">
             <img src={blog.blog_image} alt={blog.blog_title} />
@@ -61,7 +61,7 @@ const BlogDetail = () => {
             <h5>{blog.blog_title}</h5>
           </figcaption>
         </figure>
-      </a>
+      </Link>
     </div>
   );
 

@@ -68,10 +68,10 @@ function ProductDetails() {
     <div className="left-wrapper">
       <div className="sale">{selectedProduct.discount_product}</div>
       <div className="image-top">
-        <div class="swiper-container">
-          <div class="swiper-wrapper">
-            <div class="swiper-slide">
-              <div class="image">
+        <div className="swiper-container">
+          <div className="swiper-wrapper">
+            <div className="swiper-slide">
+              <div className="image">
                 <img
                   src={selectedProduct.image_product}
                   alt={selectedProduct.name_product}
@@ -196,7 +196,7 @@ function ProductDetails() {
           </a>
           <Link
             className="view-detail"
-            to={`products/${product.id_product}/info-details`}
+            to={`/products/${product.id_product}/info-details`}
             aria-label="View details"
           >
             <FaEye />
@@ -340,8 +340,8 @@ function ProductDetails() {
 
   return (
     <main className="san-pham-ct-page">
-      <section class="main-breadcrumb">
-        <div class="container">
+      <section className="main-breadcrumb">
+        <div className="container">
           <ul>
             <li>
               <a href="#">Trang chủ</a>

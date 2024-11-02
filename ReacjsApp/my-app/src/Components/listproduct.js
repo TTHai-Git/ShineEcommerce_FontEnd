@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import "../Template/shine/dist/css/core.min.css";
 import "../Template/shine/dist/css/main.min.css";
 import "../Template/shine/dist/css/main.min.css.map";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import APIs, { endpoints } from "../Config/APIs";
 import banner_1 from "../Template/shine/dist/img/home/banner-1.png";
 import banner_2 from "../Template/shine/dist/img/home/banner-2.png";
@@ -287,10 +287,13 @@ const ProductItem = ({ product }) => (
             <FaShoppingBasket />
             <span>Thêm vào giỏ hàng</span>
           </a>
-          <a className="view-detail" href="#">
+          <Link
+            className="view-detail"
+            to={`/products/${product.id_product}/info-details`}
+          >
             <FaStar />
             <span>Xem chi tiết</span>
-          </a>
+          </Link>
         </div>
       </div>
       <div className="bottom-item">

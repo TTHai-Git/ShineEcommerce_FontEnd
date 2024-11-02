@@ -65,133 +65,131 @@ function Register() {
   };
 
   return (
-    <body className="user-page">
-      <main>
-        <section className="form-user main-section">
-          <div className="container">
-            <h2 className="main-title">Đăng ký</h2>
-            <form onSubmit={handleSubmit}>
-              <div className="formWrapper">
-                <div className="form-group">
-                  <label>
-                    Họ<span>*</span>
-                  </label>
-                  <input
-                    type="text"
-                    name="last_name"
-                    value={user.last_name}
-                    onChange={handleChange}
-                  />
-                </div>
-                <div className="form-group">
-                  <label>
-                    Tên<span>*</span>
-                  </label>
-                  <input
-                    type="text"
-                    name="first_name"
-                    value={user.first_name}
-                    onChange={handleChange}
-                  />
-                </div>
-                <div className="form-group">
-                  <label>
-                    Ngày Sinh<span>*</span>
-                  </label>
-                  <input
-                    type="date"
-                    name="dob"
-                    value={user.dob}
-                    onChange={handleChange}
-                  />
-                </div>
-                <div className="form-group">
-                  <label>
-                    Số Điện Thoại<span>*</span>
-                  </label>
-                  <input
-                    type="number"
-                    name="phone"
-                    value={user.phone}
-                    onChange={handleChange}
-                  />
-                </div>
-                <div className="form-group">
-                  <label>
-                    Địa Chỉ<span>*</span>
-                  </label>
-                  <input
-                    type="text"
-                    name="address"
-                    value={user.address}
-                    onChange={handleChange}
-                  />
-                </div>
-                <div className="form-group">
-                  <label>
-                    Email<span>*</span>
-                  </label>
-                  <input
-                    type="email"
-                    name="email"
-                    value={user.email}
-                    onChange={handleChange}
-                  />
-                </div>
-                <div className="form-group">
-                  <label>
-                    Tên Tài Khoản<span>*</span>
-                  </label>
-                  <input
-                    type="text"
-                    name="username"
-                    value={user.username}
-                    onChange={handleChange}
-                  />
-                </div>
-                <div className="form-group">
-                  <label>
-                    Mật khẩu<span>*</span>
-                  </label>
-                  <input
-                    type="password"
-                    name="password"
-                    value={user.password}
-                    onChange={handleChange}
-                  />
-                </div>
-                <div className="form-group">
-                  <label>
-                    Nhập lại mật khẩu<span>*</span>
-                  </label>
-                  <input
-                    type="password"
-                    name="confirmPassword"
-                    value={user.confirmPassword}
-                    onChange={handleChange}
-                  />
-                </div>
-                <div className="form-group">
-                  <label>Ảnh đại diện</label>
-                  <input
-                    type="file"
-                    name="avatar"
-                    accept="image/*"
-                    onChange={handleChange}
-                  />
-                </div>
-                <div className="form-btn">
-                  <button type="submit">Đăng ký</button>
-                </div>
-                <div className="btn-dangky">
-                  <Link to="/login">Quay Trở Về Đăng Nhập</Link>
-                </div>
+    <main>
+      <section className="form-user main-section">
+        <div className="container">
+          <h2 className="main-title">Đăng ký</h2>
+          <form onSubmit={handleSubmit}>
+            <div className="formWrapper">
+              <div className="form-group">
+                <label>
+                  Họ<span>*</span>
+                </label>
+                <input
+                  type="text"
+                  name="last_name"
+                  value={user.last_name}
+                  onChange={handleChange}
+                />
               </div>
-            </form>
-          </div>
-        </section>
-      </main>
-    </body>
+              <div className="form-group">
+                <label>
+                  Tên<span>*</span>
+                </label>
+                <input
+                  type="text"
+                  name="first_name"
+                  value={user.first_name}
+                  onChange={handleChange}
+                />
+              </div>
+              <div className="form-group">
+                <label>
+                  Ngày Sinh<span>*</span>
+                </label>
+                <input
+                  type="date"
+                  name="dob"
+                  value={user.dob}
+                  onChange={handleChange}
+                />
+              </div>
+              <div className="form-group">
+                <label>
+                  Số Điện Thoại<span>*</span>
+                </label>
+                <input
+                  type="number"
+                  name="phone"
+                  value={user.phone}
+                  onChange={handleChange}
+                />
+              </div>
+              <div className="form-group">
+                <label>
+                  Địa Chỉ<span>*</span>
+                </label>
+                <input
+                  type="text"
+                  name="address"
+                  value={user.address}
+                  onChange={handleChange}
+                />
+              </div>
+              <div className="form-group">
+                <label>
+                  Email<span>*</span>
+                </label>
+                <input
+                  type="email"
+                  name="email"
+                  value={user.email}
+                  onChange={handleChange}
+                />
+              </div>
+              <div className="form-group">
+                <label>
+                  Tên Tài Khoản<span>*</span>
+                </label>
+                <input
+                  type="text"
+                  name="username"
+                  value={user.username}
+                  onChange={handleChange}
+                />
+              </div>
+              <div className="form-group">
+                <label>
+                  Mật khẩu<span>*</span>
+                </label>
+                <input
+                  type="password"
+                  name="password"
+                  value={user.password}
+                  onChange={handleChange}
+                />
+              </div>
+              <div className="form-group">
+                <label>
+                  Nhập lại mật khẩu<span>*</span>
+                </label>
+                <input
+                  type="password"
+                  name="confirmPassword"
+                  value={user.confirmPassword}
+                  onChange={handleChange}
+                />
+              </div>
+              <div className="form-group">
+                <label>Ảnh đại diện</label>
+                <input
+                  type="file"
+                  name="avatar"
+                  accept="image/*"
+                  onChange={handleChange}
+                />
+              </div>
+              <div className="form-btn">
+                <button type="submit">Đăng ký</button>
+              </div>
+              <div className="btn-dangky">
+                <Link to="/login">Quay Trở Về Đăng Nhập</Link>
+              </div>
+            </div>
+          </form>
+        </div>
+      </section>
+    </main>
   );
 }
 
