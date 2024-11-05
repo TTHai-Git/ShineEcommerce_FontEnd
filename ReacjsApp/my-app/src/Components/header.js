@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import "../Template/shine/dist/css/core.min.css";
 import "../Template/shine/dist/css/main.min.css";
 import "../Template/shine/dist/css/main.min.css.map";
@@ -12,11 +12,37 @@ import { MdPhone, MdSearch } from "react-icons/md";
 import { Link } from "react-router-dom";
 import { MyDispatchContext, MyUserContext } from "../Config/contexts";
 import { logOut } from "../Config/reducers";
+import APIs, { endpoints } from "../Config/APIs";
 
 function Header() {
   const user = useContext(MyUserContext);
   const dispatch = useContext(MyDispatchContext);
+  const [categories, setCategories] = useState([]);
+  const [tags, setTags] = useState([]);
+  const loadCategories = async () => {
+    try {
+      const { data } = await APIs.get(endpoints["load-category"]);
+      setCategories(data.results);
+      // console.log(data.results);
+    } catch (ex) {
+      console.log(ex);
+    }
+  };
+
+  const loadTags = async () => {
+    try {
+      const { data } = await APIs.get(endpoints["load-tag"]);
+      setTags(data.results);
+      // console.log(data.results);
+    } catch (ex) {
+      console.log(ex);
+    }
+  };
   useEffect(() => {}, [user.user]);
+  useEffect(() => {
+    loadCategories();
+    loadTags();
+  }, []);
   return (
     <header className="semi">
       <div className="container">
@@ -102,7 +128,7 @@ function Header() {
           <div className="toggle-wrapper black">
             <FaAlignLeft />
             <span>Danh mục sản phẩm</span>
-            <ul className="semi hidden-wrapper">
+            {/* <ul className="semi hidden-wrapper">
               {[
                 "Chăm Sóc Da Mặt",
                 "Chăm Sóc Tóc",
@@ -135,6 +161,24 @@ function Header() {
               <li>
                 <a href="#">Bí Kíp Làm Đẹp</a>
               </li>
+            </ul> */}
+            <ul className="semi hidden-wrapper">
+              {categories.map((category) => (
+                <li key={category.id} className="has-drop">
+                  <Link to={`/categories/${category.id}/list-product`}>
+                    {category.name}
+                  </Link>
+                  <ul>
+                    {tags.map((tag) => (
+                      <li key={tag.id}>
+                        <Link to={`/categories/${category.id}/list-product`}>
+                          {tag.name}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </li>
+              ))}
             </ul>
           </div>
           {/* Main Navigation */}

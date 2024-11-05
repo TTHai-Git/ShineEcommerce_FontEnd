@@ -323,12 +323,14 @@ function ProductDetails() {
         </div>
       </div>
       <div className="list-item">
-        <div className="swiper-container swiper-container-initialized swiper-container-horizontal">
+        <div className="swiper-container">
           <div className="swiper-wrapper">
-            <div className="swiper-slide swiper-slide-active">
+            <div className="swiper-slide">
               <Swiper spaceBetween={30} slidesPerView={4}>
                 {reviews.map((review, index) => (
-                  <ReviewItem key={index} review={review} />
+                  <SwiperSlide key={index}>
+                    <ReviewItem key={index} review={review} />
+                  </SwiperSlide>
                 ))}
               </Swiper>
             </div>
@@ -340,21 +342,6 @@ function ProductDetails() {
 
   return (
     <main className="san-pham-ct-page">
-      <section className="main-breadcrumb">
-        <div className="container">
-          <ul>
-            <li>
-              <a href="#">Trang chủ</a>
-            </li>
-            <li>
-              <a href="#">Danh mục sản phẩm</a>
-            </li>
-            <li>
-              <a href="#">Sản phẩm chăm sóc da</a>
-            </li>
-          </ul>
-        </div>
-      </section>
       <section className="product-detail py-5">
         <div className="container">
           <div className="row">

@@ -180,10 +180,7 @@ const ProductSection = ({
 }) => (
   <section className="product-list">
     <div className="container">
-      <p className="description">
-        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-        tempor...
-      </p>
+      <p className="description">Mô tả</p>
       <div className="main-wrapper py-4">
         <div className="row">
           <aside className="col-lg-3">
