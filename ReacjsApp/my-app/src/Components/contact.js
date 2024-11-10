@@ -5,16 +5,22 @@ import "../Template/shine/dist/css/main.min.css";
 
 const Contact = () => {
   const form = useRef();
+  const REACT_APP_ServiceID = process.env.REACT_APP_ServiceID;
+  const REACT_APP_TemplateID = process.env.REACT_APP_TemplateID;
+  const REACT_APP_FormID = process.env.REACT_APP_FormID;
 
   const sendEmail = (e) => {
+    // console.log(REACT_APP_ServiceID);
+    // console.log(REACT_APP_TemplateID);
+    // console.log(REACT_APP_FormID);
     e.preventDefault();
 
     emailjs
       .sendForm(
-        "service_9wq0b5h",
-        "template_ckz0s24",
+        REACT_APP_ServiceID,
+        REACT_APP_TemplateID,
         form.current,
-        "3hgF_CW3OyMYnhi2-"
+        REACT_APP_FormID
       )
       .then(
         () => {

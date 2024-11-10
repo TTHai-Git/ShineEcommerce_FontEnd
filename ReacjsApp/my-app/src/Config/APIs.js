@@ -15,6 +15,8 @@ export const endpoints = {
   "product-info-details": (product_id) => `products/${product_id}/info-details`,
   "load-all-origins": "origins/",
   register: "/users/",
+  "user-payment": "users/cart/payment/",
+  "validate-promotion-ticket": "promotiontickets/validate-promotion-ticket/",
 };
 
 export const authApi = (accessToken) =>

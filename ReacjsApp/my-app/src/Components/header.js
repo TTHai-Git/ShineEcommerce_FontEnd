@@ -13,9 +13,11 @@ import { Link } from "react-router-dom";
 import { MyDispatchContext, MyUserContext } from "../Config/contexts";
 import { logOut } from "../Config/reducers";
 import APIs, { endpoints } from "../Config/APIs";
+import { useCart } from "../Config/CartContext";
 
 function Header() {
-  const user = useContext(MyUserContext);
+  const { user } = useContext(MyUserContext);
+  const { cartItems } = useCart();
   const dispatch = useContext(MyDispatchContext);
   const [categories, setCategories] = useState([]);
   const [tags, setTags] = useState([]);
@@ -38,7 +40,7 @@ function Header() {
       console.log(ex);
     }
   };
-  useEffect(() => {}, [user.user]);
+  useEffect(() => {}, [user, cartItems.length]);
   useEffect(() => {
     loadCategories();
     loadTags();
@@ -82,11 +84,11 @@ function Header() {
                 </a>
               </li>
               <li className="user-wrapper">
-                {user.user !== null ? (
+                {user !== null ? (
                   <>
                     <span className="ic">
                       <img src={ic_2} alt={ic_2} />
-                      Chào, {user.user.last_name} {user.user.first_name}
+                      Chào, {user.last_name} {user.first_name}
                     </span>
                     <ul className="nav-user">
                       <li onClick={() => logOut(dispatch)}>Thoát</li>
@@ -113,7 +115,7 @@ function Header() {
                 <Link to="/cart">
                   <span className="ic">
                     <FaShoppingBasket />
-                    <span>0</span>
+                    <span>{cartItems.length}</span>
                   </span>
                   Giỏ hàng
                 </Link>

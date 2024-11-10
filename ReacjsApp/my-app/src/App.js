@@ -16,41 +16,43 @@ import { MyDispatchContext, MyUserContext } from "./Config/contexts";
 import ProductDetails from "./Components/productdetails";
 import Register from "./Components/register";
 import BlogDetail from "./Components/blogdetail";
-
+import { CartProvider } from "./Config/CartContext";
 function App() {
   const [user, dispatch] = useReducer(MyUserReducer, null);
 
   return (
     <div className="App">
       <MyUserContext.Provider value={{ user }}>
-        <MyDispatchContext.Provider value={dispatch}>
-          <BrowserRouter>
-            <Header />
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/about" element={<About />} />
-              <Route path="/blogs" element={<Blog />} />
-              <Route
-                path="/blogs/:blog_id/info-details"
-                element={<BlogDetail />}
-              />
-              <Route path="/contact" element={<Contact />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/register" element={<Register />} />
-              <Route
-                path="categories/:category_id/list-product"
-                element={<ListProduct />}
-              />
-              <Route
-                path="products/:selected_product_id/info-details"
-                element={<ProductDetails />}
-              />
-              <Route path="/cart" element={<Cart />} />
-              <Route path="/payment" element={<Payment />} />
-            </Routes>
-            <Footer />
-          </BrowserRouter>
-        </MyDispatchContext.Provider>
+        <CartProvider>
+          <MyDispatchContext.Provider value={dispatch}>
+            <BrowserRouter>
+              <Header />
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/about" element={<About />} />
+                <Route path="/blogs" element={<Blog />} />
+                <Route
+                  path="/blogs/:blog_id/info-details"
+                  element={<BlogDetail />}
+                />
+                <Route path="/contact" element={<Contact />} />
+                <Route path="/login" element={<Login />} />
+                <Route path="/register" element={<Register />} />
+                <Route
+                  path="categories/:category_id/list-product"
+                  element={<ListProduct />}
+                />
+                <Route
+                  path="products/:selected_product_id/info-details"
+                  element={<ProductDetails />}
+                />
+                <Route path="/cart" element={<Cart />} />
+                <Route path="/payment" element={<Payment />} />
+              </Routes>
+              <Footer />
+            </BrowserRouter>
+          </MyDispatchContext.Provider>
+        </CartProvider>
       </MyUserContext.Provider>
     </div>
   );

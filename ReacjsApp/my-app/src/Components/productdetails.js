@@ -66,7 +66,7 @@ function ProductDetails() {
 
   const ProductImages = ({ selectedProduct }) => (
     <div className="left-wrapper">
-      <div className="sale">{selectedProduct.discount_product}</div>
+      <div className="sale">{selectedProduct.discount_product} %</div>
       <div className="image-top">
         <div className="swiper-container">
           <div className="swiper-wrapper">
@@ -188,7 +188,7 @@ function ProductDetails() {
             <img src={product.image_product} alt={product.name_product} />
           </a>
         </div>
-        <div className="sale">{product.discount_product}</div>
+        <div className="sale">{product.discount_product} %</div>
         <div className="hidden-wrap">
           <a className="add-cart" href="#" aria-label="Add to cart">
             <FaShoppingBasket />

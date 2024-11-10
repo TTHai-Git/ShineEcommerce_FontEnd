@@ -21,6 +21,7 @@ import { MyUserContext } from "../Config/contexts";
 import moment from "moment";
 import vi from "moment/locale/vi";
 import { formatCurrency } from "../Convert/formatcurrency";
+import { useCart } from "../Config/CartContext";
 
 const sliderSettings = {
   dots: true,
@@ -35,12 +36,17 @@ const sliderSettings = {
 const banners = [banner_1, banner_2, banner_3];
 
 function Home() {
-  const user = useContext(MyUserContext);
+  const { user } = useContext(MyUserContext);
+  const { addToCart } = useCart();
   const [loading, setLoading] = useState(false);
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [tags, setTags] = useState([]);
   const [newBlogs, setNewBlogs] = useState([]);
+
+  const handleAddToCart = (product) => {
+    addToCart(product);
+  };
 
   const loadProducts = async () => {
     try {
@@ -88,13 +94,11 @@ function Home() {
     loadNewBlogs();
   }, []);
 
-  useEffect(() => {
-    console.log(user);
-  }, [user]);
+  useEffect(() => {}, [user]);
 
   const ProductItem = ({ product }) => (
-    <div className="col-lg-3 col-md-4 col-6 col-xxl-2" key={product.id_product}>
-      <div className="product-item border">
+    <div className="col-lg-3 col-md-4 col-6 col-xxl-2">
+      <div className="product-item border" key={product.id_product}>
         <div className="top-item">
           <div className="image">
             <a href="#">
@@ -104,12 +108,17 @@ function Home() {
               />
             </a>
           </div>
-          <div className="sale">{product.discount_product}</div>
+          <div className="sale">{product.discount_product} %</div>
           <div className="hidden-wrap">
-            <a className="add-cart" href="#" aria-label="Add to cart">
+            <Link
+              className="add-cart"
+              aria-label="Add to cart"
+              to="#"
+              onClick={() => handleAddToCart(product)}
+            >
               <FaShoppingBasket />
               <span>Thêm vào giỏ hàng</span>
-            </a>
+            </Link>
             <Link
               className="view-detail"
               to={`/products/${product.id_product}/info-details`}

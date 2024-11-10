@@ -12,6 +12,7 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { formatCurrency, parseCurrency } from "../Convert/formatcurrency";
+import { useCart } from "../Config/CartContext";
 
 // Banner images and slider settings
 const banners = [banner_1, banner_2, banner_3];
@@ -27,6 +28,7 @@ const sliderSettings = {
 
 const ListProduct = () => {
   const { category_id } = useParams();
+  const { addToCart } = useCart();
   const [productByCategory, setProductsByCategory] = useState([]);
   const [titleCategory, setTitleCategory] = useState("");
   const [allOrigins, setAllOrigins] = useState([]);
@@ -42,6 +44,10 @@ const ListProduct = () => {
   const [selectedOrigin, setSelectedOrigin] = useState("Tất Cả");
   const [sortOrder, setSortOrder] = useState("");
   const navigate = useNavigate();
+
+  const handleAddToCart = (product) => {
+    addToCart(product);
+  };
 
   // Load products based on category ID
   const loadProductsByCategory = async () => {
@@ -133,6 +139,7 @@ const ListProduct = () => {
           filterPrices={filterPrices}
           onFilterChange={handleChange}
           onOrderSortChange={handleSortChange} // Pass setSortOrder to ProductList
+          handleAddToCart={handleAddToCart}
         />
         <BackToTop />
       </main>
@@ -177,6 +184,7 @@ const ProductSection = ({
   filterPrices,
   onFilterChange,
   onOrderSortChange,
+  handleAddToCart,
 }) => (
   <section className="product-list">
     <div className="container">
@@ -195,6 +203,7 @@ const ProductSection = ({
               products={products}
               titleCategory={titleCategory}
               onOrderSortChange={onOrderSortChange}
+              handleAddToCart={handleAddToCart}
             />
           </div>
         </div>
@@ -241,7 +250,12 @@ const FilterGroup = ({ title, options, onChange }) => (
 );
 
 // Product List Component
-const ProductList = ({ products, titleCategory, onOrderSortChange }) => (
+const ProductList = ({
+  products,
+  titleCategory,
+  onOrderSortChange,
+  handleAddToCart,
+}) => (
   <div className="product-list-wrapper">
     <div className="heading-wrapper">
       <h1 className="shine-title">{titleCategory}</h1>
@@ -257,7 +271,11 @@ const ProductList = ({ products, titleCategory, onOrderSortChange }) => (
     <div className="list-item-wrapper">
       <div className="row">
         {products.map((product) => (
-          <ProductItem key={product.id} product={product} />
+          <ProductItem
+            key={product.id}
+            product={product}
+            handleAddToCart={() => handleAddToCart(product)}
+          />
         ))}
       </div>
     </div>
@@ -267,7 +285,7 @@ const ProductList = ({ products, titleCategory, onOrderSortChange }) => (
 // Handler for sorting changes
 
 // ProductItem Component
-const ProductItem = ({ product }) => (
+const ProductItem = ({ product, handleAddToCart }) => (
   <div className="col-md-4 col-6 col-xl-3">
     <div className="product-item">
       <div className="top-item">
@@ -277,13 +295,18 @@ const ProductItem = ({ product }) => (
           </a>
         </div>
         {product.discount_product && (
-          <div className="sale">{product.discount_product}</div>
+          <div className="sale">{product.discount_product} %</div>
         )}
         <div className="hidden-wrap">
-          <a className="add-cart" href="#">
+          <Link
+            className="add-cart"
+            aria-label="Add to cart"
+            to="#"
+            onClick={handleAddToCart}
+          >
             <FaShoppingBasket />
             <span>Thêm vào giỏ hàng</span>
-          </a>
+          </Link>
           <Link
             className="view-detail"
             to={`/products/${product.id_product}/info-details`}
