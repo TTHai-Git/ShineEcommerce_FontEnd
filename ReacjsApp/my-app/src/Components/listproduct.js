@@ -16,6 +16,7 @@ import { useCart } from "../Config/CartContext";
 
 // Banner images and slider settings
 const banners = [banner_1, banner_2, banner_3];
+
 const sliderSettings = {
   dots: true,
   infinite: true,
@@ -27,6 +28,8 @@ const sliderSettings = {
 };
 
 const ListProduct = () => {
+  const [page, setPage] = useState(1);
+  const [endPage, setEndPage] = useState(false);
   const { category_id } = useParams();
   const { addToCart } = useCart();
   const [productByCategory, setProductsByCategory] = useState([]);
@@ -78,6 +81,9 @@ const ListProduct = () => {
         params.append("sort_order", sortOrder);
       }
 
+      // Append page number
+      params.append("page", page);
+
       // Combine base URL with query parameters
       url += `?${params.toString()}`;
       console.log(url); // Log the final URL
@@ -87,7 +93,17 @@ const ListProduct = () => {
       navigate(`/categories/${category_id}/list-product?${params.toString()}`);
       const products = res.data.results || [];
 
-      setProductsByCategory(products);
+      // Update product list based on the page
+      if (page === 1) {
+        setProductsByCategory(products);
+      } else {
+        setProductsByCategory((current) => [...current, ...products]);
+      }
+
+      // Update end page status
+      setEndPage(res.data.next === null);
+
+      // Set the title category
       setTitleCategory(products[0]?.name_category || "Sản phẩm");
     } catch (error) {
       console.error("Failed to load products:", error);
@@ -106,7 +122,7 @@ const ListProduct = () => {
 
   useEffect(() => {
     loadProductsByCategory();
-  }, [category_id, selectedOrigin, selectedPrice, sortOrder]);
+  }, [category_id, selectedOrigin, selectedPrice, sortOrder, page]);
 
   useEffect(() => {
     loadAllOrigins();
@@ -128,6 +144,16 @@ const ListProduct = () => {
     console.log("Sort order set to:", value); // Log the sort order for debugging
   };
 
+  // Increase page handler
+  const handelSetPageIncrease = () => {
+    setPage((prevPage) => prevPage + 1);
+  };
+
+  // Decrease page handler with minimum limit
+  const handelSetPageDecrease = () => {
+    setPage((prevPage) => prevPage - prevPage + 1);
+  };
+
   return (
     <div className="san-pham-ds-page">
       <main>
@@ -140,7 +166,11 @@ const ListProduct = () => {
           onFilterChange={handleChange}
           onOrderSortChange={handleSortChange} // Pass setSortOrder to ProductList
           handleAddToCart={handleAddToCart}
+          handelSetPageIncrease={handelSetPageIncrease}
+          handelSetPageDecrease={handelSetPageDecrease}
+          endPage={endPage}
         />
+
         <BackToTop />
       </main>
     </div>
@@ -150,29 +180,31 @@ const ListProduct = () => {
 // Banner Component
 const Banner = () => (
   <section className="home-banner">
-    <Slider {...sliderSettings}>
-      {banners.map((banner, index) => (
-        <div key={index}>
-          <div className="image-wrapper">
-            <img src={banner} alt={`Banner ${index + 1}`} />
-          </div>
-          <div className="content-wrapper">
-            <div className="container">
-              <div className="row">
-                <div className="col-lg-5">
-                  <p>Trải nghiệm sản phẩm mới</p>
-                  <h1>Bộ Đôi Dưỡng Trắng Và Đặc Trị Nám Chuyên Sâu</h1>
-                  <a href="#" className="buy-now-button">
-                    <FaShoppingBasket />
-                    <span>Mua ngay</span>
-                  </a>
+    <div className="swiper-container">
+      <Slider {...sliderSettings}>
+        {banners.map((banner, index) => (
+          <div key={index} className="swiper-slide">
+            <div className="image-wrapper">
+              <img src={banner} alt={`Banner ${index + 1}`} />
+            </div>
+            <div className="content-wrapper">
+              <div className="container">
+                <div className="row">
+                  <div className="col-lg-5">
+                    <p>Trải nghiệm sản phẩm mới</p>
+                    <h1>Bộ Đôi Dưỡng Trắng Và Đặc Trị Nám Chuyên Sâu</h1>
+                    <a href="#" className="buy-now-button">
+                      <FaShoppingBasket />
+                      <span>Mua ngay</span>
+                    </a>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-      ))}
-    </Slider>
+        ))}
+      </Slider>
+    </div>
   </section>
 );
 
@@ -185,6 +217,9 @@ const ProductSection = ({
   onFilterChange,
   onOrderSortChange,
   handleAddToCart,
+  handelSetPageIncrease,
+  handelSetPageDecrease,
+  endPage,
 }) => (
   <section className="product-list">
     <div className="container">
@@ -204,6 +239,9 @@ const ProductSection = ({
               titleCategory={titleCategory}
               onOrderSortChange={onOrderSortChange}
               handleAddToCart={handleAddToCart}
+              handelSetPageIncrease={handelSetPageIncrease}
+              handelSetPageDecrease={handelSetPageDecrease}
+              endPage={endPage}
             />
           </div>
         </div>
@@ -255,6 +293,9 @@ const ProductList = ({
   titleCategory,
   onOrderSortChange,
   handleAddToCart,
+  handelSetPageIncrease,
+  handelSetPageDecrease,
+  endPage,
 }) => (
   <div className="product-list-wrapper">
     <div className="heading-wrapper">
@@ -278,6 +319,29 @@ const ProductList = ({
           />
         ))}
       </div>
+    </div>
+    <div className="button">
+      {endPage === false ? (
+        <>
+          <Link
+            className="view-more-button"
+            to="#"
+            onClick={() => handelSetPageIncrease()}
+          >
+            Xem thêm
+          </Link>
+        </>
+      ) : (
+        <>
+          <Link
+            className="view-more-button"
+            to="#"
+            onClick={() => handelSetPageDecrease()}
+          >
+            Thu gọn
+          </Link>
+        </>
+      )}
     </div>
   </div>
 );
@@ -336,10 +400,16 @@ const ProductItem = ({ product, handleAddToCart }) => (
               <FaStar key={i} />
             ))}
           </div>
+
           <div className="cart-button">
-            <a href="#">
+            <Link
+              className="add-cart"
+              aria-label="Add to cart"
+              to="#"
+              onClick={() => handleAddToCart(product)}
+            >
               <FaShoppingBasket />
-            </a>
+            </Link>
           </div>
         </div>
       </div>

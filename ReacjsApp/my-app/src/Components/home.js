@@ -80,8 +80,8 @@ function Home() {
 
   const loadNewBlogs = async () => {
     try {
-      const { data } = await APIs.get(endpoints["load-new-blogs"]);
-      setNewBlogs(data.results);
+      const res = await APIs.get(endpoints["load-new-blogs"]);
+      setNewBlogs(res.data.results);
     } catch (error) {
       console.error(error);
     }
@@ -94,19 +94,17 @@ function Home() {
     loadNewBlogs();
   }, []);
 
-  useEffect(() => {}, [user]);
-
   const ProductItem = ({ product }) => (
-    <div className="col-lg-3 col-md-4 col-6 col-xxl-2">
-      <div className="product-item border" key={product.id_product}>
+    <div className="col-lg-3 col-md-4 col-6 col-xxl-2" key={product.id_product}>
+      <div className="product-item border">
         <div className="top-item">
           <div className="image">
-            <a href="#">
+            <Link to="#">
               <img
                 src={product?.image_product || "/default-image.png"}
                 alt={product?.name_product}
               />
-            </a>
+            </Link>
           </div>
           <div className="sale">{product.discount_product} %</div>
           <div className="hidden-wrap">
@@ -131,7 +129,7 @@ function Home() {
         </div>
         <div className="bottom-item">
           <h5 className="title">
-            <a href="#">{product.name_product}</a>
+            <Link to="#">{product.name_product}</Link>
           </h5>
           <div className="price">
             <span className="new black">
@@ -148,9 +146,14 @@ function Home() {
               ))}
             </div>
             <div className="cart-button">
-              <a href="#">
+              <Link
+                className="add-cart"
+                aria-label="Add to cart"
+                to="#"
+                onClick={() => handleAddToCart(product)}
+              >
                 <FaShoppingBasket />
-              </a>
+              </Link>
             </div>
           </div>
         </div>
@@ -159,8 +162,8 @@ function Home() {
   );
 
   const BlogTopItem = ({ blog }) => (
-    <div className="blog-item top-item">
-      <a href="#">
+    <div className="blog-item top-item" key={blog.blog_id}>
+      <Link to="#">
         <figure>
           <div className="image">
             <img src={blog.blog_image} alt={blog.blog_title} />
@@ -172,13 +175,13 @@ function Home() {
             <h5 className="title">{blog.blog_title}</h5>
           </figcaption>
         </figure>
-      </a>
+      </Link>
     </div>
   );
 
   const BlogPartItem = ({ blog }) => (
-    <div className="blog-item part-item">
-      <a href="#">
+    <div className="blog-item part-item" key={blog.blog_id}>
+      <Link to="#">
         <figure>
           <div className="image">
             <img src={blog.blog_image} alt={blog.blog_title} />
@@ -190,7 +193,7 @@ function Home() {
             <h5 className="title">{blog.blog_title}</h5>
           </figcaption>
         </figure>
-      </a>
+      </Link>
     </div>
   );
 
@@ -203,14 +206,11 @@ function Home() {
         <ProductItem product={product} key={product.id_product} />
       ));
 
-  const renderTopNewBlogs = () =>
-    newBlogs
-      .filter((newBlog) => newBlog.blog_id === newBlogs.length - 1)
-      .map((newBlog) => <BlogTopItem blog={newBlog} key={newBlog.blog_id} />);
+  const renderTopNewBlogs = (newBlog) => <BlogTopItem blog={newBlog} />;
 
   const renderPartNewBlogs = () =>
     newBlogs
-      .filter((newBlog) => newBlog.blog_id !== newBlogs.length - 1)
+      .slice(1) // Start from the second blog to avoid duplication with the top blog
       .map((newBlog) => <BlogPartItem blog={newBlog} key={newBlog.blog_id} />);
 
   const renderProductsByCategory = (categoryName) =>
@@ -223,33 +223,31 @@ function Home() {
   return (
     <main>
       <section className="home-banner">
-        <Slider {...sliderSettings}>
-          {banners.map((banner, index) => (
-            <div key={index}>
-              <div className="image-wrapper">
-                <img src={banner} alt={`Banner ${index + 1}`} />
-              </div>
-              <div className="content-wrapper">
-                <div className="container">
-                  <div className="row">
-                    <div className="col-lg-5">
-                      <p>Trải nghiệm sản phẩm mới</p>
-                      <h1>Bộ Đôi Dưỡng Trắng Và Đặc Trị Nám Chuyên Sâu</h1>
-                      <a
-                        href="#"
-                        className="buy-now-button"
-                        aria-label="Buy now"
-                      >
-                        <FaShoppingBasket />
-                        <span>Mua ngay</span>
-                      </a>
+        <div className="swiper-container">
+          <Slider {...sliderSettings}>
+            {banners.map((banner, index) => (
+              <div key={index} className="swiper-slide">
+                <div className="image-wrapper">
+                  <img src={banner} alt={`Banner ${index + 1}`} />
+                </div>
+                <div className="content-wrapper">
+                  <div className="container">
+                    <div className="row">
+                      <div className="col-lg-5">
+                        <p>Trải nghiệm sản phẩm mới</p>
+                        <h1>Bộ Đôi Dưỡng Trắng Và Đặc Trị Nám Chuyên Sâu</h1>
+                        <a href="#" className="buy-now-button">
+                          <FaShoppingBasket />
+                          <span>Mua ngay</span>
+                        </a>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
-            </div>
-          ))}
-        </Slider>
+            ))}
+          </Slider>
+        </div>
       </section>
 
       <div className="home-1 py-5 pb-2">
@@ -305,7 +303,9 @@ function Home() {
           </div>
           <div className="list-item-wrapper">
             <div className="row">
-              <div className="col-lg-6">{renderTopNewBlogs()}</div>
+              {newBlogs[0] && (
+                <div className="col-lg-6">{renderTopNewBlogs(newBlogs[0])}</div>
+              )}
               <div className="col-lg-6">{renderPartNewBlogs()}</div>
             </div>
           </div>

@@ -4,9 +4,12 @@ import "../Template/shine/dist/css/main.min.css";
 import "../Template/shine/dist/css/main.min.css.map";
 import cer_img from "../Template/shine/dist/img/cer.png";
 import img_3 from "../Template/shine/dist/img/img-3.png";
+import { FaFacebook, FaYoutube, FaTwitter, FaInstagram } from "react-icons/fa";
 
 function Footer() {
   const [email, setEmail] = useState("");
+
+  const icons = [<FaFacebook />, <FaYoutube />, <FaTwitter />, <FaInstagram />];
 
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
@@ -119,15 +122,11 @@ function Footer() {
                 <div className="text-wrap social">
                   <h4>Kết nối với chúng tôi</h4>
                   <ul>
-                    {["facebook", "youtube-play", "twitter", "instagram"].map(
-                      (platform, index) => (
-                        <li key={index}>
-                          <a href="#">
-                            <em className={`fa fa-${platform}`}></em>
-                          </a>
-                        </li>
-                      )
-                    )}
+                    {icons.map((icon, index) => (
+                      <li key={index}>
+                        <a href="#">{icon}</a>
+                      </li>
+                    ))}
                   </ul>
                   <div className="certification">
                     <img src={cer_img} alt="Certification" />

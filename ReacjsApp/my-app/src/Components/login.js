@@ -94,13 +94,6 @@ function Login() {
           </form>
         </div>
       </section>
-
-      <div id="phoneButton">
-        <a href="#">
-          <span className="ic">📞</span>
-        </a>
-      </div>
-      <div id="backToTop">⬆️</div>
     </main>
   );
 }

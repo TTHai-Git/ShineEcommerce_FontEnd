@@ -90,12 +90,12 @@ const Contact = () => {
       <div id="phoneButton">
         <a href="#">
           <span className="ic">
-            <em className="mdi mdi-phone"></em>
+            <em className="mdi mdi-arrow-up"></em>
           </span>
         </a>
       </div>
       <div id="backToTop">
-        <em className="mdi mdi-arrow-up"></em>
+        <em className="mdi mdi-phone"></em>
       </div>
     </main>
   );

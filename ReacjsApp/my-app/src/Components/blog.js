@@ -5,24 +5,47 @@ import "../Template/shine/dist/css/main.min.css.map";
 import APIs, { endpoints } from "../Config/APIs";
 import moment from "moment";
 import vi from "moment/locale/vi";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Blog = () => {
   const [blogs, setBlogs] = useState([]);
-  const [page, setPage] = useState(null);
+  const [page, setPage] = useState(1);
+  const [endPage, setEndPage] = useState(false);
+  const navigate = useNavigate();
 
   const loadBlogs = async () => {
-    const { data } = await APIs.get(endpoints["load-new-blogs"]);
-    console.log(data.results);
-    setBlogs(data.results);
+    let url = `${endpoints["load-new-blogs"]}`;
+    const params = new URLSearchParams();
+    params.append("page", page);
+    url += `?${params.toString()}`;
+    const res = await APIs.get(url);
+    navigate(`/blogs?${params.toString()}`);
+    // console.log(res.data);
+    if (page === 1) {
+      setBlogs(res.data.results);
+    } else {
+      setBlogs((current) => [...current, ...res.data.results]);
+    }
+
+    // Update end page status
+    setEndPage(res.data.next === null);
   };
 
   useEffect(() => {
     loadBlogs();
-  }, []);
+  }, [page]);
+
+  const handelSetPageIncrease = () => {
+    setPage((prevPage) => prevPage + 1);
+  };
+
+  // Decrease page handler with minimum limit
+  const handelSetPageDecrease = () => {
+    setPage((prevPage) => prevPage - prevPage + 1);
+  };
 
   const BlogItem = ({ blog }) => (
-    <div className="news-item" key={blog.id}>
+    <div className="news-item" key={blog.blog_id}>
       <figure>
         <div className="image">
           <a href="#">
@@ -47,7 +70,7 @@ const Blog = () => {
             className="btn-viewmore"
             to={`/blogs/${blog.blog_id}/info-details`}
           >
-            Xem thêm
+            Xem Chi tiết
           </Link>
         </figcaption>
       </figure>
@@ -62,10 +85,33 @@ const Blog = () => {
           <div className="news-list">
             <div className="row">
               {blogs.map((blog) => (
-                <div className="col-md-6 col-lg-4 item" key={blog.id}>
+                <div className="col-md-6 col-lg-4 item" key={blog.blog_id}>
                   <BlogItem blog={blog} />
                 </div>
               ))}
+            </div>
+            <div className="button">
+              {endPage === false ? (
+                <>
+                  <Link
+                    className="view-more-button"
+                    to="#"
+                    onClick={() => handelSetPageIncrease()}
+                  >
+                    Xem thêm
+                  </Link>
+                </>
+              ) : (
+                <>
+                  <Link
+                    className="view-more-button"
+                    to="#"
+                    onClick={() => handelSetPageDecrease()}
+                  >
+                    Thu gọn
+                  </Link>
+                </>
+              )}
             </div>
           </div>
         </div>

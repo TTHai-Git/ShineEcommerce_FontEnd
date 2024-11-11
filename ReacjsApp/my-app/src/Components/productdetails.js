@@ -1,10 +1,9 @@
 import "../Template/shine/dist/css/core.min.css";
 import "../Template/shine/dist/css/main.min.css";
-import { useRef, useState, useCallback, useEffect } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/navigation";
-import { Navigation, Thumbs } from "swiper/modules";
 import "swiper/css/thumbs";
 import {
   FaFacebook,
@@ -24,6 +23,7 @@ import detail_3 from "../Template/shine/dist/img/product/detail-3.png";
 import { Link, useParams } from "react-router-dom";
 import APIs, { endpoints } from "../Config/APIs";
 import { formatCurrency } from "../Convert/formatcurrency";
+import { useCart } from "../Config/CartContext";
 
 function ProductDetails() {
   const { selected_product_id } = useParams();
@@ -33,8 +33,12 @@ function ProductDetails() {
   const [reviews, setReviews] = useState([]);
   const [quantity, setQuantity] = useState(1);
   const [selectedColor, setSelectedColor] = useState("#e08271");
-  const [thumbsSwiper, setThumbsSwiper] = useState(null);
   const [isExpanded, setIsExpanded] = useState(false);
+  const { addToCart } = useCart();
+
+  const handleAddToCart = (product) => {
+    addToCart(product);
+  };
 
   const loadInfoDetailsOfProduct = async () => {
     try {
@@ -158,9 +162,15 @@ function ProductDetails() {
         </div>
       </div>
       <div className="add-cart">
-        <a href="#" aria-label="Đặt hàng ngay">
-          <FaShoppingBasket /> Đặt hàng ngay
-        </a>
+        <Link
+          className="add-cart"
+          aria-label="Add to cart"
+          to="#"
+          onClick={() => handleAddToCart(selectedProduct)}
+        >
+          <FaShoppingBasket />
+          <span>Thêm vào giỏ hàng</span>
+        </Link>
       </div>
     </div>
   );
@@ -190,10 +200,15 @@ function ProductDetails() {
         </div>
         <div className="sale">{product.discount_product} %</div>
         <div className="hidden-wrap">
-          <a className="add-cart" href="#" aria-label="Add to cart">
+          <Link
+            className="add-cart"
+            aria-label="Add to cart"
+            to="#"
+            onClick={() => handleAddToCart(product)}
+          >
             <FaShoppingBasket />
             <span>Thêm vào giỏ hàng</span>
-          </a>
+          </Link>
           <Link
             className="view-detail"
             to={`/products/${product.id_product}/info-details`}
@@ -223,9 +238,14 @@ function ProductDetails() {
             ))}
           </div>
           <div className="cart-button">
-            <a href="#">
+            <Link
+              className="add-cart"
+              aria-label="Add to cart"
+              to="#"
+              onClick={() => handleAddToCart(product)}
+            >
               <FaShoppingBasket />
-            </a>
+            </Link>
           </div>
         </div>
       </div>
@@ -236,32 +256,19 @@ function ProductDetails() {
     <div className="related-products-wrapper other-wrapper">
       <div className="heading">
         <h3 className="shine-title">Sản Phẩm Tương Tự</h3>
-        <div className="swiper-navigation">
-          <div className="swiper-navigation">
-            <div
-              className="swiper-prev"
-              tabIndex="0"
-              aria-label="Previous slide"
-              aria-disabled="true"
-            >
-              <em className="lnr lnr-chevron-left"></em>
-            </div>
-            <div
-              className="swiper-next"
-              tabIndex="0"
-              aria-label="Next slide"
-              aria-disabled="false"
-            >
-              <em className="lnr lnr-chevron-right"></em>
-            </div>
-          </div>
-        </div>
       </div>
       <div className="list-item">
         <div className="swiper-container">
           <div className="swiper-wrapper">
             <div className="swiper-slide">
-              <Swiper spaceBetween={30} slidesPerView={4}>
+              <Swiper
+                spaceBetween={30}
+                slidesPerView={4}
+                autoplay={{
+                  delay: 3000, // Adjust delay time in milliseconds
+                  disableOnInteraction: false, // Keep autoplay running after user interaction
+                }}
+              >
                 {relatedproducts.map((product, index) => (
                   <SwiperSlide key={index}>
                     <ProductCard product={product} />
@@ -301,32 +308,19 @@ function ProductDetails() {
     <div className="product-reviews-wrapper other-wrapper">
       <div className="heading">
         <h3 className="shine-title">Đánh giá sản phẩm</h3>
-        <div className="swiper-navigation">
-          <div className="swiper-navigation">
-            <div
-              className="swiper-prev"
-              tabIndex="0"
-              aria-label="Previous slide"
-              aria-disabled="true"
-            >
-              <em className="lnr lnr-chevron-left"></em>
-            </div>
-            <div
-              className="swiper-next"
-              tabIndex="0"
-              aria-label="Next slide"
-              aria-disabled="false"
-            >
-              <em className="lnr lnr-chevron-right"></em>
-            </div>
-          </div>
-        </div>
       </div>
       <div className="list-item">
         <div className="swiper-container">
           <div className="swiper-wrapper">
             <div className="swiper-slide">
-              <Swiper spaceBetween={30} slidesPerView={4}>
+              <Swiper
+                spaceBetween={30}
+                slidesPerView={4}
+                autoplay={{
+                  delay: 3000, // Adjust delay time in milliseconds
+                  disableOnInteraction: false, // Keep autoplay running after user interaction
+                }}
+              >
                 {reviews.map((review, index) => (
                   <SwiperSlide key={index}>
                     <ReviewItem key={index} review={review} />
