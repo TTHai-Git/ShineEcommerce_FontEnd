@@ -88,7 +88,8 @@ function Header() {
                   <>
                     <span className="ic">
                       <img src={ic_2} alt={ic_2} />
-                      Chào, {user.last_name} {user.first_name}
+                      {/* Chào, {user.last_name} {user.first_name} */}
+                      Chào, {user.username}
                     </span>
                     <ul className="nav-user">
                       <li onClick={() => logOut(dispatch)}>Thoát</li>

@@ -29,6 +29,26 @@ export const CartProvider = ({ children }) => {
     });
     alert("Thêm vào giỏ hàng thành công");
   };
+
+  const addToCartWithQuantity = (item, quantity) => {
+    setCartItems((prevItems) => {
+      const existingItem = prevItems.find(
+        (cartItem) => cartItem.id_product === item.id_product
+      );
+
+      if (existingItem) {
+        return prevItems.map((cartItem) =>
+          cartItem.id_product === item.id_product
+            ? { ...cartItem, quantity: cartItem.quantity + quantity }
+            : cartItem
+        );
+      } else {
+        return [...prevItems, { ...item, quantity: quantity }];
+      }
+    });
+    alert("Thêm vào giỏ hàng thành công");
+  };
+
   const removeItem = (id) => {
     setCartItems((prevItems) =>
       prevItems.filter((item) => item.id_product !== id)
@@ -63,6 +83,7 @@ export const CartProvider = ({ children }) => {
       value={{
         cartItems,
         addToCart,
+        addToCartWithQuantity,
         increaseQuantity,
         decreaseQuantity,
         removeItem,

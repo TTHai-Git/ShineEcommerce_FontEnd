@@ -48,7 +48,7 @@ function Payment() {
   };
 
   const [order, setOrder] = useState({
-    user_id: user.id.toString(),
+    user_id: user.id ? user.id.toString() : user.uid.toString(),
     city_id: 0,
     city: "",
 
@@ -304,25 +304,47 @@ function Payment() {
                 <div className="content">
                   <div className="form-group">
                     <div className="input-group">
-                      <input id="sex-1" type="radio" name="sex" />
+                      <input
+                        id="sex-1"
+                        type="radio"
+                        name="sex"
+                        checked={user.sex ? true : false}
+                      />
                       <label htmlFor="sex-1">Anh</label>
                     </div>
                     <div className="input-group">
-                      <input id="sex-2" type="radio" name="sex" />
+                      <input
+                        id="sex-2"
+                        type="radio"
+                        name="sex"
+                        checked={!user.sex ? true : false}
+                      />
                       <label htmlFor="sex-2">Chị</label>
                     </div>
                   </div>
                   <div className="form-group">
-                    <input type="text" placeholder="Họ tên" />
+                    <input
+                      type="text"
+                      placeholder="Họ tên"
+                      value={user.last_name + " " + user.first_name}
+                    />
                   </div>
                   <div className="form-group">
-                    <input type="text" placeholder="Email" />
+                    <input type="text" placeholder="Email" value={user.email} />
                   </div>
                   <div className="form-group">
-                    <input type="text" placeholder="Địa chỉ" />
+                    <input
+                      type="text"
+                      placeholder="Địa chỉ"
+                      value={user.address}
+                    />
                   </div>
                   <div className="form-group">
-                    <input type="text" placeholder="Số điện thoại" />
+                    <input
+                      type="text"
+                      placeholder="Số điện thoại"
+                      value={user.phone}
+                    />
                   </div>
                 </div>
               </div>
@@ -665,7 +687,7 @@ function Payment() {
                         {order.shipment_type === "Nhận tại cửa hàng" ? (
                           <>
                             <span>
-                              Phí vận chuyển ( + +{" "}
+                              Phí vận chuyển ( +{" "}
                               {formatCurrency(`${SHIPPING_RATE_PER_KM}`)}/km)
                             </span>
 

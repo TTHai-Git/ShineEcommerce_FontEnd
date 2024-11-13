@@ -34,10 +34,10 @@ function ProductDetails() {
   const [quantity, setQuantity] = useState(1);
   const [selectedColor, setSelectedColor] = useState("#e08271");
   const [isExpanded, setIsExpanded] = useState(false);
-  const { addToCart } = useCart();
+  const { addToCartWithQuantity } = useCart();
 
-  const handleAddToCart = (product) => {
-    addToCart(product);
+  const handleAddToCart = (product, quantity) => {
+    addToCartWithQuantity(product, quantity);
   };
 
   const loadInfoDetailsOfProduct = async () => {
@@ -166,7 +166,7 @@ function ProductDetails() {
           className="add-cart"
           aria-label="Add to cart"
           to="#"
-          onClick={() => handleAddToCart(selectedProduct)}
+          onClick={() => handleAddToCart(selectedProduct, quantity)}
         >
           <FaShoppingBasket />
           <span>Thêm vào giỏ hàng</span>
