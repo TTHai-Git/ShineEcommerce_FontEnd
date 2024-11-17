@@ -1,3 +1,4 @@
+// src/App.js
 import "./App.css";
 import Header from "./Components/header";
 import Footer from "./Components/footer";
@@ -17,6 +18,8 @@ import ProductDetails from "./Components/productdetails";
 import Register from "./Components/register";
 import BlogDetail from "./Components/blogdetail";
 import { CartProvider } from "./Config/CartContext";
+import PaymentReturn from "./Components/paymenreturn";
+
 function App() {
   const [user, dispatch] = useReducer(MyUserReducer, null);
 
@@ -48,6 +51,7 @@ function App() {
                 />
                 <Route path="/cart" element={<Cart />} />
                 <Route path="/payment" element={<Payment />} />
+                <Route path="/payment-return" element={<PaymentReturn />} />
               </Routes>
               <Footer />
             </BrowserRouter>

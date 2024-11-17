@@ -25,7 +25,10 @@ function Payment() {
   const [cities, setCities] = useState([]);
   const [districts, setDistricts] = useState([]);
   const [wards, setWards] = useState([]);
-  const [distance, setDistance] = useState(10);
+  const [distance, setDistance] = useState(0);
+  const [addressShop, setAddressShop] = useState(
+    "198 Đ. Hoàng Văn Thụ, Phường 8, Phú Nhuận, Hồ Chí Minh, Việt Nam"
+  );
   const [discountVoucher, setDiscountVoucher] = useState(0);
   const SHIPPING_RATE_PER_KM = 1500;
   const { user } = useContext(MyUserContext);
@@ -231,66 +234,79 @@ function Payment() {
     alert(data.message);
   };
 
-  // const calculateDistance = async (originAddress, destinationAddress) => {
-  //   try {
-  //     const mapboxToken = process.env.REACT_APP_MapToken
+  const calculateDistance = async (originAddress, destinationAddress) => {
+    try {
+      const mapboxToken = process.env.REACT_APP_MapToken;
 
-  //     // Step 1: Geocode both addresses in parallel
-  //     const [originResponse, destinationResponse] = await Promise.all([
-  //       axios.get(
-  //         `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(
-  //           originAddress
-  //         )}.json`,
-  //         {
-  //           params: { access_token: mapboxToken },
-  //         }
-  //       ),
-  //       axios.get(
-  //         `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(
-  //           destinationAddress
-  //         )}.json`,
-  //         {
-  //           params: { access_token: mapboxToken },
-  //         }
-  //       ),
-  //     ]);
+      // Step 1: Geocode both addresses in parallel
+      const [originResponse, destinationResponse] = await Promise.all([
+        axios.get(
+          `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(
+            originAddress
+          )}.json`,
+          {
+            params: { access_token: mapboxToken },
+          }
+        ),
+        axios.get(
+          `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(
+            destinationAddress
+          )}.json`,
+          {
+            params: { access_token: mapboxToken },
+          }
+        ),
+      ]);
 
-  //     // Check if both geocoding responses have valid coordinates
-  //     const originCoordinates = originResponse.data.features[0]?.center;
-  //     const destinationCoordinates =
-  //       destinationResponse.data.features[0]?.center;
+      // Check if both geocoding responses have valid coordinates
+      const originCoordinates = originResponse.data.features[0]?.center;
+      const destinationCoordinates =
+        destinationResponse.data.features[0]?.center;
 
-  //     if (!originCoordinates || !destinationCoordinates) {
-  //       console.error("Error: Invalid coordinates for origin or destination");
-  //       return null;
-  //     }
+      if (!originCoordinates || !destinationCoordinates) {
+        console.error("Lỗi: Tọa độ điểm đi hoặc điểm đến không hợp lệ");
+        return null;
+      }
 
-  //     // Step 2: Calculate distance using Directions API
-  //     const directionsResponse = await axios.get(
-  //       `https://api.mapbox.com/directions/v5/mapbox/driving/${originCoordinates.join(
-  //         ","
-  //       )};${destinationCoordinates.join(",")}`,
-  //       {
-  //         params: { access_token: mapboxToken, geometries: "geojson" },
-  //       }
-  //     );
+      // Step 2: Calculate distance using Directions API
+      const directionsResponse = await axios.get(
+        `https://api.mapbox.com/directions/v5/mapbox/driving/${originCoordinates.join(
+          ","
+        )};${destinationCoordinates.join(",")}`,
+        {
+          params: { access_token: mapboxToken, geometries: "geojson" },
+        }
+      );
 
-  //     const distanceInKilometers =
-  //       (directionsResponse.data.routes[0]?.distance || 0) / 1000; // Convert to kilometers
-  //     console.log(`Distance: ${distanceInKilometers.toFixed(2)} km`);
-  //     setDistance(distanceInKilometers.toFixed(2));
-  //   } catch (error) {
-  //     console.error("Error calculating distance:", error);
-  //     return null;
-  //   }
-  // };
+      const distanceInKilometers =
+        (directionsResponse.data.routes[0]?.distance || 0) / 1000; // Convert to kilometers
+      console.log(`Distance: ${distanceInKilometers.toFixed(2)} km`);
+      if (distanceInKilometers <= 0) {
+        alert("ĐỊA CHỈ GIAO HÀNG KHÔNG HỢP LỆ! VUI LÒNG HÃY KIỂM TRA LẠI!!!");
+      } else {
+        setDistance(distanceInKilometers.toFixed(2));
+      }
+    } catch (error) {
+      console.error("Error calculating distance:", error);
+      return null;
+    }
+  };
 
-  // useEffect(() => {
-  //   calculateDistance(
-  //     "Này chứa địa chỉ giao hàng",
-  //     "Này chứa của cửa hàng",
-  //   );
-  // }, []);
+  const handelPaymenByVNPay = async () => {
+    try {
+      const response = await axios.post(
+        "http://localhost:5000/api/vnpay/create-payment-url",
+        {
+          amount: order.total_amount, // Payment amount in VND
+          orderId: Date.now().toString(),
+        }
+      );
+      window.location.href = response.data.paymentUrl;
+      handleSubmit(order, cartItems);
+    } catch (error) {
+      console.error("Payment error:", error);
+    }
+  };
 
   return (
     <main>
@@ -425,6 +441,13 @@ function Payment() {
                     ></textarea>
                   </div>
                 </div>
+                <button
+                  onClick={() =>
+                    calculateDistance(addressShop, order.shipment_address)
+                  }
+                >
+                  Xác nhận địa chỉ giao hàng
+                </button>
               </div>
               <div className="box-wrapper">
                 <div className="heading">Phương thức thanh toán</div>
@@ -553,6 +576,9 @@ function Payment() {
                     </label>
                   </div>
                 </div>
+                <button onClick={() => handelPaymenByVNPay()}>
+                  Thanh toán qua cổng thanh toán VNPay
+                </button>
               </div>
               <div className="box-wrapper">
                 <div className="heading">Phương thức giao hàng</div>
