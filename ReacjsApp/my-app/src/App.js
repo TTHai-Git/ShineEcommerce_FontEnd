@@ -19,6 +19,8 @@ import Register from "./Components/register";
 import BlogDetail from "./Components/blogdetail";
 import { CartProvider } from "./Config/CartContext";
 import PaymentReturn from "./Components/paymenreturn";
+import Orders from "./Components/orders";
+import OrdersDetails from "./Components/ordersdetails";
 
 function App() {
   const [user, dispatch] = useReducer(MyUserReducer, null);
@@ -52,6 +54,11 @@ function App() {
                 <Route path="/cart" element={<Cart />} />
                 <Route path="/payment" element={<Payment />} />
                 <Route path="/payment-return" element={<PaymentReturn />} />
+                <Route path="/users/:user_id/orders" element={<Orders />} />
+                <Route
+                  path="/users/:user_id/orders/:order_id/list-order-details"
+                  element={<OrdersDetails />}
+                />
               </Routes>
               <Footer />
             </BrowserRouter>

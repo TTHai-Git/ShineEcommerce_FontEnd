@@ -19,16 +19,16 @@ function Cart() {
   // Calculate the subtotal for display
   const calculateSubtotal = (item) => {
     const discount =
-      (item.discount_product / 100) * item.present_price * item.quantity;
-    return item.present_price * item.quantity - discount;
+      (item.discount_product / 100) * item.unit_price_product * item.quantity;
+    return item.unit_price_product * item.quantity - discount;
   };
 
   // Calculate the total amount
   const calculateTotalAmount = () => {
     return cartItems.reduce((total, item) => {
       const discount =
-        (item.discount_product / 100) * item.present_price * item.quantity;
-      const itemTotal = item.present_price * item.quantity - discount;
+        (item.discount_product / 100) * item.unit_price_product * item.quantity;
+      const itemTotal = item.unit_price_product * item.quantity - discount;
       return total + itemTotal;
     }, 0);
   };
@@ -61,6 +61,7 @@ function Cart() {
                       </div>
                       <div className="name-product">
                         <h3>{cartItem.name_product}</h3>
+
                         <div className="delete-product">
                           <a
                             href="#"
@@ -91,15 +92,16 @@ function Cart() {
                         </button>
                       </div>
                     </td>
-                    <td className="discount">
+                    <td className="price">
+                      {cartItem.discount_product} % = -
                       {formatCurrency(
                         (cartItem.discount_product / 100) *
-                          cartItem.present_price *
+                          cartItem.unit_price_product *
                           cartItem.quantity
                       )}
                     </td>
                     <td className="total">
-                      {formatCurrency(calculateSubtotal(cartItem))}
+                      + {formatCurrency(calculateSubtotal(cartItem))}
                     </td>
                   </tr>
                 ))}
@@ -108,16 +110,6 @@ function Cart() {
           </div>
           <div className="main-total-amount">
             <div className="box-amount">
-              <div className="totalamount">
-                <p>Tạm tính</p>
-                <span className="price">
-                  {formatCurrency(calculateTotalAmount())}
-                </span>
-              </div>
-              {/* <div className="totalamount">
-                <p>Phí vận chuyển</p>
-                <span className="price">No Idea :D</span>
-              </div> */}
               <div className="totalamount">
                 <p>Cần thanh toán</p>
                 <span className="total">

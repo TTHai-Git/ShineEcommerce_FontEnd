@@ -6,7 +6,7 @@ import shipment_2 from "../Template/shine/dist/img/shipment-2.png";
 import shipment_3 from "../Template/shine/dist/img/shipment-3.png";
 import shipment_4 from "../Template/shine/dist/img/shipment-4.png";
 import { FaShoppingBasket } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useCart } from "../Config/CartContext";
 import { formatCurrency } from "../Convert/formatcurrency";
@@ -32,20 +32,21 @@ function Payment() {
   const [discountVoucher, setDiscountVoucher] = useState(0);
   const SHIPPING_RATE_PER_KM = 1500;
   const { user } = useContext(MyUserContext);
+  const navigate = useNavigate();
 
   // Calculate the subtotal for display
   const calculateSubtotal = (item) => {
     const discount =
-      (item.discount_product / 100) * item.present_price * item.quantity;
-    return item.present_price * item.quantity - discount;
+      (item.discount_product / 100) * item.unit_price_product * item.quantity;
+    return item.unit_price_product * item.quantity - discount;
   };
 
   // Calculate the total amount
   const calculateTotalAmount = () => {
     return cartItems.reduce((total, item) => {
       const discount =
-        (item.discount_product / 100) * item.present_price * item.quantity;
-      const itemTotal = item.present_price * item.quantity - discount;
+        (item.discount_product / 100) * item.unit_price_product * item.quantity;
+      const itemTotal = item.unit_price_product * item.quantity - discount;
       return total + itemTotal;
     }, 0);
   };
@@ -175,7 +176,7 @@ function Payment() {
 
     // Check if the terms are accepted
     if (!order.termsAccepted) {
-      alert("Please accept the terms and conditions.");
+      alert("Vui lòng chấp thuận điều khoản trước khi thanh toán");
       return;
     }
 
@@ -190,7 +191,7 @@ function Payment() {
         total_amount: calculateSubtotal(cartItems[index]).toString(), // Ensure this function is defined
         discount_price: (
           (cartItems[index].discount_product / 100) *
-          cartItems[index].present_price *
+          cartItems[index].unit_price_product *
           cartItems[index].quantity
         ).toString(),
       });
@@ -211,6 +212,7 @@ function Payment() {
 
       if (data && data.message) {
         alert(data.message);
+        navigate("/");
       }
     } catch (error) {
       alert("An error occurred: " + error.message);
@@ -285,6 +287,7 @@ function Payment() {
         alert("ĐỊA CHỈ GIAO HÀNG KHÔNG HỢP LỆ! VUI LÒNG HÃY KIỂM TRA LẠI!!!");
       } else {
         setDistance(distanceInKilometers.toFixed(2));
+        alert("ĐỊA CHỈ HỢP LỆ. XÁC NHẬN ĐỊA CHỈ GIAO HÀNG THÀNH CÔNG!");
       }
     } catch (error) {
       console.error("Error calculating distance:", error);
@@ -673,22 +676,33 @@ function Payment() {
                               <span className="title">
                                 {cartItem.name_product}
                               </span>
-                              <span className="price">
-                                {formatCurrency(calculateSubtotal(cartItem))}
-                              </span>
                             </p>
                             <p>
+                              <span>Đơn Giá</span>
+                              <span className="price">
+                                {formatCurrency(cartItem.unit_price_product)}
+                              </span>
+                            </p>
+
+                            <p>
                               <span>Số lượng</span>
-                              <span> {cartItem.quantity}</span>
+                              <span> X {cartItem.quantity}</span>
                             </p>
                             <p>
                               <span>Giảm giá </span>
                               <span>
+                                -{" "}
                                 {formatCurrency(
                                   (cartItem.discount_product / 100) *
-                                    cartItem.present_price *
+                                    cartItem.unit_price_product *
                                     cartItem.quantity
                                 )}
+                              </span>
+                            </p>
+                            <p>
+                              <span>Thành Tiền</span>
+                              <span className="price">
+                                + {formatCurrency(calculateSubtotal(cartItem))}
                               </span>
                             </p>
                           </figcaption>

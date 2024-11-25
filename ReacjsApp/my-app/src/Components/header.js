@@ -75,14 +75,21 @@ function Header() {
           {/* Top List Section */}
           <div className="top-list-wrapper">
             <ul>
-              <li>
-                <a href="#">
-                  <span className="ic">
-                    <img src={ic_1} alt="" />
-                  </span>
-                  Kinh nghiệm hay
-                </a>
-              </li>
+              {user !== null ? (
+                <>
+                  <li>
+                    <Link to={`/users/${user.id}/orders`}>
+                      Đơn Hàng
+                      <span className="ic">
+                        <img src={ic_1} alt="" />
+                      </span>
+                    </Link>
+                  </li>
+                </>
+              ) : (
+                <></>
+              )}
+
               <li className="user-wrapper">
                 {user !== null ? (
                   <>
@@ -91,6 +98,7 @@ function Header() {
                       {/* Chào, {user.last_name} {user.first_name} */}
                       Chào, {user.username}
                     </span>
+
                     <ul className="nav-user">
                       <li onClick={() => logOut(dispatch)}>Thoát</li>
                     </ul>

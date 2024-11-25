@@ -17,6 +17,8 @@ export const endpoints = {
   register: "/users/",
   "user-payment": "users/cart/payment/",
   "validate-promotion-ticket": "promotiontickets/validate-promotion-ticket/",
+  "show-orders": (user_id) => `users/${user_id}/orders/`,
+  "list-order-details": (order_id) => `orders/${order_id}/list-order-details`,
 };
 
 export const authApi = (accessToken) =>
