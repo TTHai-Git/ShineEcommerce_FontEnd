@@ -21,6 +21,7 @@ import { CartProvider } from "./Config/CartContext";
 import PaymentReturn from "./Components/paymenreturn";
 import Orders from "./Components/orders";
 import OrdersDetails from "./Components/ordersdetails";
+import ForgotPassword from "./Components/forgotpassword";
 
 function App() {
   const [user, dispatch] = useReducer(MyUserReducer, null);
@@ -58,6 +59,10 @@ function App() {
                 <Route
                   path="/users/:user_id/orders/:order_id/list-order-details"
                   element={<OrdersDetails />}
+                />
+                <Route
+                  path="/users/change-password"
+                  element={<ForgotPassword />}
                 />
               </Routes>
               <Footer />

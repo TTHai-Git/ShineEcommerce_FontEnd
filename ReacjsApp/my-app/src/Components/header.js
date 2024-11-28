@@ -101,6 +101,13 @@ function Header() {
 
                     <ul className="nav-user">
                       <li onClick={() => logOut(dispatch)}>Thoát</li>
+                      <li
+                        onClick={() =>
+                          console.log("Chuyển sang trang thông tin người dùng")
+                        }
+                      >
+                        Thông Tin Người Dùng
+                      </li>
                     </ul>
                   </>
                 ) : (

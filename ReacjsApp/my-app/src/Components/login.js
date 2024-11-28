@@ -11,6 +11,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 function Login() {
   const [user, setUser] = useState({ username: "", password: "" });
   const [loading, setLoading] = useState(false);
+  const [sendOtpLoading, setSendOtpLoading] = useState(false);
   const [socialLoading, setSocialLoading] = useState(false);
   const [error, setError] = useState(""); // For error handling
   const dispatch = useContext(MyDispatchContext);
@@ -75,6 +76,25 @@ function Login() {
     }
   };
 
+  const handelSendOtp = async () => {
+    setSendOtpLoading(true);
+    try {
+      const url = `${endpoints["send-otp"]}`;
+      const res = await APIs.post(url, {
+        username: user.username,
+      });
+      console.log(res);
+      alert(res.data.message);
+      if (res.status === 200) {
+        navigate("/users/change-password");
+      }
+    } catch (ex) {
+      alert(ex);
+    } finally {
+      setSendOtpLoading(false);
+    }
+  };
+
   return (
     <main className="user-page">
       <section className="form-user main-section">
@@ -116,6 +136,15 @@ function Login() {
               <div className="btn-dangky">
                 <Link to="/register">Tạo tài khoản mới</Link>
               </div>
+              <button
+                type="button"
+                disabled={sendOtpLoading}
+                onClick={() => handelSendOtp()}
+              >
+                {sendOtpLoading
+                  ? "Đang kiểm tra tài khoản để gửi mã opt..."
+                  : "Quên mật khẩu?"}
+              </button>
               <p>Đăng nhập bằng Facebook hoặc Google tại đây</p>
               <button
                 type="button"

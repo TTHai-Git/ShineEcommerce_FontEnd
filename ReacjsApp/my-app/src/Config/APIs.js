@@ -4,6 +4,8 @@ const BASE_URL = "http://127.0.0.1:8000";
 
 export const endpoints = {
   login: "/o/token/",
+  "send-otp": "users/send-otp/",
+  "change-password": "users/change-password/",
   "load-product-home": "products/load-product-home/",
   "load-category": "categories/",
   "load-tag": "tags/",
