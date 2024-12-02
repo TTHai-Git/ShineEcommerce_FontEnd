@@ -2,10 +2,11 @@ import React, { useContext } from "react";
 import "../Template/shine/dist/css/core.min.css";
 import "../Template/shine/dist/css/main.min.css";
 import { Link } from "react-router-dom";
-import { FaShoppingBasket, FaSignInAlt } from "react-icons/fa";
+import { FaShoppingBasket, FaSignInAlt, FaTrash } from "react-icons/fa";
 import { useCart } from "../Config/CartContext";
 import { formatCurrency } from "../Convert/formatcurrency";
 import { MyUserContext } from "../Config/contexts";
+import "../Template/shine/dist/css/CommentForm.css";
 
 function Cart() {
   const { cartItems, removeItem, decreaseQuantity, increaseQuantity } =
@@ -63,14 +64,17 @@ function Cart() {
                         <h3>{cartItem.name_product}</h3>
 
                         <div className="delete-product">
-                          <a
-                            href="#"
+                          <FaTrash
                             onClick={() =>
                               handleRemoveItem(cartItem.id_product)
                             }
-                          >
-                            <span>Xoá</span>
-                          </a>
+                            style={{
+                              color: "red",
+                              cursor: "pointer",
+                              fontSize: "1.2rem",
+                            }}
+                            title={`Delete product ${cartItem.id_product}`}
+                          />
                         </div>
                       </div>
                     </td>

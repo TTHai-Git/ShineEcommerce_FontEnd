@@ -1,5 +1,4 @@
 // src/App.js
-import "./App.css";
 import Header from "./Components/header";
 import Footer from "./Components/footer";
 import Home from "./Components/home";
@@ -22,6 +21,9 @@ import PaymentReturn from "./Components/paymenreturn";
 import Orders from "./Components/orders";
 import OrdersDetails from "./Components/ordersdetails";
 import ForgotPassword from "./Components/forgotpassword";
+import UserInfoProfile from "./Components/userinfoprofile";
+import Notification from "./Components/notification";
+import MoreProduct from "./Components/moreproducts";
 
 function App() {
   const [user, dispatch] = useReducer(MyUserReducer, null);
@@ -64,6 +66,15 @@ function App() {
                   path="/users/change-password"
                   element={<ForgotPassword />}
                 />
+                <Route
+                  path="/users/current-user"
+                  element={<UserInfoProfile />}
+                />
+                <Route
+                  path="/users/:user_id/notifications/"
+                  element={<Notification />}
+                />
+                <Route path="/products/search/" element={<MoreProduct />} />
               </Routes>
               <Footer />
             </BrowserRouter>

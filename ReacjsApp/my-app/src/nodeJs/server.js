@@ -1,6 +1,6 @@
 // server.js
 const express = require("express");
-const vnpayPayment = require("./src/service/vnpay/vnpayPayment"); // Adjust this path if needed
+const vnpayPayment = require("../service/vnpay/vnpayPayment"); // Adjust this path if needed
 const cors = require("cors");
 
 const app = express();

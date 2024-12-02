@@ -1,6 +1,7 @@
 import "../Template/shine/dist/css/core.min.css";
 import "../Template/shine/dist/css/main.min.css";
-import { useState, useCallback, useEffect } from "react";
+import "../Template/shine/dist/css/CommentForm.css";
+import { useState, useCallback, useEffect, useContext } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/navigation";
@@ -15,17 +16,23 @@ import {
   FaChevronUp,
   FaEye,
   FaStar,
+  FaSignInAlt,
+  FaTrash,
 } from "react-icons/fa";
-import detail_1 from "../Template/shine/dist/img/product/detail-1.png";
-import detail_2 from "../Template/shine/dist/img/product/detail-2.png";
-import detail_3 from "../Template/shine/dist/img/product/detail-3.png";
+// import detail_1 from "../Template/shine/dist/img/product/detail-1.png";
+// import detail_2 from "../Template/shine/dist/img/product/detail-2.png";
+// import detail_3 from "../Template/shine/dist/img/product/detail-3.png";
 
 import { Link, useParams } from "react-router-dom";
-import APIs, { endpoints } from "../Config/APIs";
+import APIs, { authApi, endpoints } from "../Config/APIs";
 import { formatCurrency } from "../Convert/formatcurrency";
 import { useCart } from "../Config/CartContext";
+import CommentForm from "./commentform";
+import { MyUserContext } from "../Config/contexts";
+import Modal from "./modal";
 
 function ProductDetails() {
+  const { user } = useContext(MyUserContext);
   const { selected_product_id } = useParams();
   const [selectedProduct, setSelectedProduct] = useState([]);
   const [relatedproducts, setRelatedProducts] = useState([]);
@@ -53,6 +60,18 @@ function ProductDetails() {
       }
     } catch (ex) {
       console.log(ex);
+    }
+  };
+
+  const delComment = async (selected_comment_id) => {
+    try {
+      const url = `${endpoints["del-comment"](selected_comment_id)}`;
+      const res = await authApi(user.access_token).delete(url);
+      alert(res.data.message);
+    } catch (ex) {
+      console.log(ex);
+    } finally {
+      loadInfoDetailsOfProduct();
     }
   };
 
@@ -282,6 +301,18 @@ function ProductDetails() {
     </div>
   );
 
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [mediaType, setMediaType] = useState("");
+  const [mediaUrl, setMediaUrl] = useState("");
+  const [mediaName, setMediaName] = useState("");
+  const openModal = (fileType, fileUrl, fileName) => {
+    setMediaType(fileType);
+    setMediaUrl(fileUrl);
+    setMediaName(fileName);
+    setIsModalOpen(true);
+  };
+  const closeModal = () => setIsModalOpen(false);
+
   const ReviewItem = ({ review }) => (
     <div className="review-item" key={review.comment_id}>
       <figure>
@@ -292,15 +323,94 @@ function ProductDetails() {
           />
         </div>
         <figcaption>
-          <div className="rate">
-            {[...Array(`${review.comment_star}`)].map((_, i) => (
-              <em key={i} className="fa fa-star active"></em>
-            ))}
+          <div className="form-group">
+            <h5>{review.user_fullname}</h5>
+            <div className="stars">
+              {[...Array(5)].map((_, i) => (
+                <FaStar
+                  key={i}
+                  className={`star ${i < review.comment_star ? "active" : ""}`}
+                />
+              ))}
+            </div>
+            <p>{review.comment_content}</p>
           </div>
-          <h5>{review.user_fullname}</h5>
-          <p>{review.comment_content}</p>
+          <div className="form-group">
+            {review.comment_files.length > 0 && (
+              <ul className="file-list">
+                {review.comment_files.map((file, index) => {
+                  const isImage = file.file_resource_type.startsWith("image");
+                  const isVideo = file.file_resource_type.startsWith("video");
+
+                  return (
+                    <li key={index} className="file-item">
+                      {isImage && (
+                        <img
+                          src={file.file_url}
+                          alt={file.file_name}
+                          style={{
+                            width: "100px",
+                            height: "100px",
+                            objectFit: "cover",
+                            cursor: "pointer",
+                          }}
+                          onClick={() =>
+                            openModal(
+                              file.file_resource_type,
+                              file.file_url,
+                              file.file_name
+                            )
+                          }
+                        />
+                      )}
+                      {isVideo && (
+                        <video
+                          src={file.file_url}
+                          controls
+                          style={{
+                            width: "150px",
+                            height: "100px",
+                            cursor: "pointer",
+                          }}
+                          onClick={() =>
+                            openModal(
+                              file.file_resource_type,
+                              file.file_url,
+                              file.file_name
+                            )
+                          }
+                        ></video>
+                      )}
+                      <p>{file.file_name}</p>
+                    </li>
+                  );
+                })}
+              </ul>
+            )}
+          </div>
         </figcaption>
+        {user !== null && user.id === review.user_id ? (
+          <div className="delete-icon-wrapper">
+            <FaTrash
+              onClick={() => delComment(review.comment_id)}
+              style={{
+                color: "red",
+                cursor: "pointer",
+                fontSize: "1.2rem",
+              }}
+              title={`Delete comment ${review.comment_id}`}
+            />
+          </div>
+        ) : null}
       </figure>
+      {/* Modal for viewing details */}
+      <Modal
+        isOpen={isModalOpen}
+        close={closeModal}
+        mediaType={mediaType}
+        mediaUrl={mediaUrl}
+        mediaName={mediaName}
+      />
     </div>
   );
 
@@ -361,6 +471,30 @@ function ProductDetails() {
               <ReviewProducts reviews={reviews} />
             </div>
           </div>
+          {user ? (
+            <>
+              <section className="comment-section">
+                <h3>Hãy để lại đánh giá sản phẩm nha!</h3>
+                <CommentForm selected_product_id={selected_product_id} />
+              </section>
+            </>
+          ) : (
+            <>
+              <div className="row">
+                <section className="comment-section">
+                  <Link
+                    to="/login"
+                    state={{
+                      from: `/products/${selected_product_id}/info-details`,
+                    }}
+                  >
+                    <FaSignInAlt /> Bạn có thể để lại đánh giá bằng cách đăng
+                    nhập đó ^_^
+                  </Link>
+                </section>
+              </div>
+            </>
+          )}
         </div>
       </section>
     </main>
