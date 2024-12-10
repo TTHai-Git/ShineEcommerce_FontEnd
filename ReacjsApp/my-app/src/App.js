@@ -23,7 +23,8 @@ import OrdersDetails from "./Components/ordersdetails";
 import ForgotPassword from "./Components/forgotpassword";
 import UserInfoProfile from "./Components/userinfoprofile";
 import Notification from "./Components/notification";
-import MoreProduct from "./Components/moreproducts";
+import ListMoreProduct from "./Components/listmoreproduct";
+import { NotificationProvider } from "./Config/NotificationContext";
 
 function App() {
   const [user, dispatch] = useReducer(MyUserReducer, null);
@@ -32,53 +33,58 @@ function App() {
     <div className="App">
       <MyUserContext.Provider value={{ user }}>
         <CartProvider>
-          <MyDispatchContext.Provider value={dispatch}>
-            <BrowserRouter>
-              <Header />
-              <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/about" element={<About />} />
-                <Route path="/blogs" element={<Blog />} />
-                <Route
-                  path="/blogs/:blog_id/info-details"
-                  element={<BlogDetail />}
-                />
-                <Route path="/contact" element={<Contact />} />
-                <Route path="/login" element={<Login />} />
-                <Route path="/register" element={<Register />} />
-                <Route
-                  path="categories/:category_id/list-product"
-                  element={<ListProduct />}
-                />
-                <Route
-                  path="products/:selected_product_id/info-details"
-                  element={<ProductDetails />}
-                />
-                <Route path="/cart" element={<Cart />} />
-                <Route path="/payment" element={<Payment />} />
-                <Route path="/payment-return" element={<PaymentReturn />} />
-                <Route path="/users/:user_id/orders" element={<Orders />} />
-                <Route
-                  path="/users/:user_id/orders/:order_id/list-order-details"
-                  element={<OrdersDetails />}
-                />
-                <Route
-                  path="/users/change-password"
-                  element={<ForgotPassword />}
-                />
-                <Route
-                  path="/users/current-user"
-                  element={<UserInfoProfile />}
-                />
-                <Route
-                  path="/users/:user_id/notifications/"
-                  element={<Notification />}
-                />
-                <Route path="/products/search/" element={<MoreProduct />} />
-              </Routes>
-              <Footer />
-            </BrowserRouter>
-          </MyDispatchContext.Provider>
+          <NotificationProvider>
+            <MyDispatchContext.Provider value={dispatch}>
+              <BrowserRouter>
+                <Header />
+                <Routes>
+                  <Route path="/" element={<Home />} />
+                  <Route path="/about" element={<About />} />
+                  <Route path="/blogs" element={<Blog />} />
+                  <Route
+                    path="/blogs/:blog_id/info-details"
+                    element={<BlogDetail />}
+                  />
+                  <Route path="/contact" element={<Contact />} />
+                  <Route path="/login" element={<Login />} />
+                  <Route path="/register" element={<Register />} />
+                  <Route
+                    path="categories/:category_id/list-product"
+                    element={<ListProduct />}
+                  />
+                  <Route
+                    path="products/:selected_product_id/info-details"
+                    element={<ProductDetails />}
+                  />
+                  <Route path="/cart" element={<Cart />} />
+                  <Route path="/payment" element={<Payment />} />
+                  <Route path="/payment-return" element={<PaymentReturn />} />
+                  <Route path="/users/:user_id/orders" element={<Orders />} />
+                  <Route
+                    path="/users/:user_id/orders/:order_id/list-order-details"
+                    element={<OrdersDetails />}
+                  />
+                  <Route
+                    path="/users/change-password"
+                    element={<ForgotPassword />}
+                  />
+                  <Route
+                    path="/users/current-user"
+                    element={<UserInfoProfile />}
+                  />
+                  <Route
+                    path="/users/:user_id/notifications/"
+                    element={<Notification />}
+                  />
+                  <Route
+                    path="/products/search/"
+                    element={<ListMoreProduct />}
+                  />
+                </Routes>
+                <Footer />
+              </BrowserRouter>
+            </MyDispatchContext.Provider>
+          </NotificationProvider>
         </CartProvider>
       </MyUserContext.Provider>
     </div>

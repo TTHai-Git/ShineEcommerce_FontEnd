@@ -17,10 +17,12 @@ import { logOut } from "../Config/reducers";
 import APIs, { endpoints } from "../Config/APIs";
 import { useCart } from "../Config/CartContext";
 import { formatCurrency } from "../Convert/formatcurrency";
+import { useNotification } from "../Config/NotificationContext";
 
 function Header() {
   const { user } = useContext(MyUserContext);
   const { cartItems } = useCart();
+  const { notificationItems = [] } = useNotification() || {};
   const dispatch = useContext(MyDispatchContext);
   const [categories, setCategories] = useState([]);
   const [tags, setTags] = useState([]);
@@ -78,7 +80,7 @@ function Header() {
   };
 
   const searchProductsWithKeywords = async () => {
-    navigate(`/products/search/?keyword=${kw}`);
+    navigate(`/products/search/?keyword=${kw}&page=${1}`);
     setShowSuggestions(false);
   };
 
@@ -105,7 +107,7 @@ function Header() {
                 value={kw}
                 onChange={(e) => handleOnChange(e.target.value)}
                 onFocus={() => setShowSuggestions(suggestions.length > 0)}
-                onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
+                onBlur={() => setTimeout(() => setShowSuggestions(false), 1000)}
               />
               <button
                 type="submit"
@@ -148,11 +150,11 @@ function Header() {
                         </div>
                       </li>
                     ))}
-                    {suggestions.length > 5 && (
+                    {suggestions.length > 0 && (
                       <li
                         className="see-more"
                         onClick={() =>
-                          navigate(`/products/search/?keyword=${kw}`)
+                          navigate(`/products/search/?keyword=${kw}&page=${1}`)
                         }
                       >
                         Xem thêm sản phẩm
@@ -182,9 +184,14 @@ function Header() {
                     </Link>
                   </li>
                   <li>
-                    <Link to={`/users/${user.id}/notifications`}>
+                    <Link to={`/users/${user.id}/notifications/?page=${1}`}>
                       <span className="ic">
                         <FaBell />
+                        <span>
+                          {notificationItems.length
+                            ? notificationItems.length
+                            : 0}
+                        </span>
                       </span>
                       Thông Báo
                     </Link>

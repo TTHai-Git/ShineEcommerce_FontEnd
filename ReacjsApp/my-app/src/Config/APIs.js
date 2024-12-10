@@ -7,7 +7,7 @@ export const endpoints = {
   "send-otp": "users/send-otp/",
   "change-password": "users/change-password/",
   "load-product-home": "products/load-product-home/",
-  "search-products-by-keyword": "products/search/",
+  "search-products-by-keyword": "/products/search/",
   "load-category": "categories/",
   "load-tag": "tags/",
   "load-new-blogs": "blogs/load-new-blogs/",
@@ -24,6 +24,10 @@ export const endpoints = {
   "list-order-details": (order_id) => `orders/${order_id}/list-order-details`,
   "add-comment": (product_id) => `products/${product_id}/add-comment/`,
   "del-comment": (comment_id) => `comments/${comment_id}/del-comment/`,
+  get_notifications: (user_id) => `users/${user_id}/notifications`,
+  notifications_not_seen: (user_id) =>
+    `users/${user_id}/notifications-not-seen`,
+  update_seen_status: (event_id) => `events/${event_id}/update-seen-status/`,
 };
 
 export const authApi = (accessToken) =>

@@ -22,6 +22,8 @@ import {
 // import detail_1 from "../Template/shine/dist/img/product/detail-1.png";
 // import detail_2 from "../Template/shine/dist/img/product/detail-2.png";
 // import detail_3 from "../Template/shine/dist/img/product/detail-3.png";
+import moment from "moment";
+import vi from "moment/locale/vi";
 
 import { Link, useParams } from "react-router-dom";
 import APIs, { authApi, endpoints } from "../Config/APIs";
@@ -333,7 +335,14 @@ function ProductDetails() {
                 />
               ))}
             </div>
+            <p>
+              {moment(review.comment_created_date)
+                .locale("vi", vi)
+                .format("DD/MM/YYYY, HH:mm")}
+            </p>
+            <br></br>
             <p>{review.comment_content}</p>
+            <br></br>
           </div>
           <div className="form-group">
             {review.comment_files.length > 0 && (
