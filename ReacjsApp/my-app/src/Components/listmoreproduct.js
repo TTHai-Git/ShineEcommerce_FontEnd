@@ -1,11 +1,17 @@
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import "../Template/shine/dist/css/core.min.css";
 import "../Template/shine/dist/css/main.min.css";
+import "../Template/shine/dist/css/StarRate.css";
 import "../Template/shine/dist/css/Filter.css";
 import APIs, { endpoints } from "../Config/APIs";
 import { useEffect, useState } from "react";
 import { useCart } from "../Config/CartContext";
-import { FaShoppingBasket, FaStar } from "react-icons/fa";
+import {
+  FaShoppingBasket,
+  FaStar,
+  FaStarHalfAlt,
+  FaRegStar,
+} from "react-icons/fa";
 import { formatCurrency } from "../Convert/formatcurrency";
 
 const ListMoreProduct = () => {
@@ -117,6 +123,8 @@ const ListMoreProduct = () => {
                           <ProductItem
                             key={product.id_product}
                             product={product}
+                            page={page}
+                            keyword={keyword}
                             handleAddToCart={() => handleAddToCart(product)}
                           />
                         ))}
@@ -181,7 +189,7 @@ const Filter = ({ selectedFilter, onFilterChange }) => {
 };
 
 // Product Card Component
-const ProductItem = ({ product, handleAddToCart }) => (
+const ProductItem = ({ product, handleAddToCart, keyword, page }) => (
   <div className="col-md-4 col-6 col-xl-3">
     <div className="product-item">
       <div className="top-item">
@@ -197,7 +205,7 @@ const ProductItem = ({ product, handleAddToCart }) => (
           <Link
             className="add-cart"
             aria-label="Add to cart"
-            to="#"
+            to={`/products/search/?keyword=${keyword}&page=${page}`}
             onClick={handleAddToCart}
           >
             <FaShoppingBasket />
@@ -227,6 +235,35 @@ const ProductItem = ({ product, handleAddToCart }) => (
               {formatCurrency(product.unit_price_product)}
             </span>
           )}
+        </div>
+        <div className="flex">
+          <div className="rate" data-rate="5">
+            <div className="stars">
+              {[...Array(5)].map((_, i) => {
+                const rating = product.star_comment_rate;
+                if (i < Math.floor(rating)) {
+                  // Full star
+                  return <FaStar key={i} className="star active" />;
+                } else if (i < rating) {
+                  // Half star
+                  return <FaStarHalfAlt key={i} className="star half-active" />;
+                } else {
+                  // Empty star
+                  return <FaRegStar key={i} className="star" />;
+                }
+              })}
+            </div>
+          </div>
+          <div className="cart-button">
+            <Link
+              className="add-cart"
+              aria-label="Add to cart"
+              to={`/products/search/?keyword=${keyword}&page=${page}`}
+              onClick={() => handleAddToCart(product)}
+            >
+              <FaShoppingBasket />
+            </Link>
+          </div>
         </div>
       </div>
     </div>

@@ -1,0 +1,10 @@
+.star {
+  color: #ccc; /* Màu sao trống */
+}
+.star.active {
+  color: #ffd700; /* Màu sao đầy */
+}
+.star.half-active {
+  color: #ffd700; /* Màu nửa sao */
+  position: relative;
+}

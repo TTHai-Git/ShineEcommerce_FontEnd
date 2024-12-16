@@ -1,5 +1,6 @@
 import "../Template/shine/dist/css/core.min.css";
 import "../Template/shine/dist/css/main.min.css";
+import "../Template/shine/dist/css/StarRate.css";
 import "../Template/shine/dist/css/CommentForm.css";
 import { useState, useCallback, useEffect, useContext } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -16,6 +17,8 @@ import {
   FaChevronUp,
   FaEye,
   FaStar,
+  FaStarHalfAlt,
+  FaRegStar,
   FaSignInAlt,
   FaTrash,
 } from "react-icons/fa";
@@ -253,10 +256,22 @@ function ProductDetails() {
           </span>
         </div>
         <div className="flex">
-          <div className="rate" data-rate="3">
-            {[...Array(5)].map((_, i) => (
-              <FaStar key={i} />
-            ))}
+          <div className="rate" data-rate="5">
+            <div className="stars">
+              {[...Array(5)].map((_, i) => {
+                const rating = product.star_comment_rate;
+                if (i < Math.floor(rating)) {
+                  // Full star
+                  return <FaStar key={i} className="star active" />;
+                } else if (i < rating) {
+                  // Half star
+                  return <FaStarHalfAlt key={i} className="star half-active" />;
+                } else {
+                  // Empty star
+                  return <FaRegStar key={i} className="star" />;
+                }
+              })}
+            </div>
           </div>
           <div className="cart-button">
             <Link
@@ -277,6 +292,16 @@ function ProductDetails() {
     <div className="related-products-wrapper other-wrapper">
       <div className="heading">
         <h3 className="shine-title">Sản Phẩm Tương Tự</h3>
+        <div class="swiper-navigation">
+          <div class="swiper-navigation">
+            <div class="swiper-prev">
+              <em class="lnr lnr-chevron-left"></em>
+            </div>
+            <div class="swiper-next">
+              <em class="lnr lnr-chevron-right"></em>
+            </div>
+          </div>
+        </div>
       </div>
       <div className="list-item">
         <div className="swiper-container">
@@ -328,12 +353,19 @@ function ProductDetails() {
           <div className="form-group">
             <h5>{review.user_fullname}</h5>
             <div className="stars">
-              {[...Array(5)].map((_, i) => (
-                <FaStar
-                  key={i}
-                  className={`star ${i < review.comment_star ? "active" : ""}`}
-                />
-              ))}
+              {[...Array(5)].map((_, i) => {
+                const rating = review.comment_star;
+                if (i < Math.floor(rating)) {
+                  // Full star
+                  return <FaStar key={i} className="star active" />;
+                } else if (i < rating) {
+                  // Half star
+                  return <FaStarHalfAlt key={i} className="star half-active" />;
+                } else {
+                  // Empty star
+                  return <FaRegStar key={i} className="star" />;
+                }
+              })}
             </div>
             <p>
               {moment(review.comment_created_date)
@@ -427,6 +459,16 @@ function ProductDetails() {
     <div className="product-reviews-wrapper other-wrapper">
       <div className="heading">
         <h3 className="shine-title">Đánh giá sản phẩm</h3>
+        <div class="swiper-navigation">
+          <div class="swiper-navigation">
+            <div class="swiper-prev">
+              <em class="lnr lnr-chevron-left"></em>
+            </div>
+            <div class="swiper-next">
+              <em class="lnr lnr-chevron-right"></em>
+            </div>
+          </div>
+        </div>
       </div>
       <div className="list-item">
         <div className="swiper-container">
@@ -484,7 +526,10 @@ function ProductDetails() {
             <>
               <section className="comment-section">
                 <h3>Hãy để lại đánh giá sản phẩm nha!</h3>
-                <CommentForm selected_product_id={selected_product_id} />
+                <CommentForm
+                  selected_product_id={selected_product_id}
+                  loadInfoDetailsOfProduct={loadInfoDetailsOfProduct}
+                />
               </section>
             </>
           ) : (

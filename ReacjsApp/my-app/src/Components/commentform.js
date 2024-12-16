@@ -1,13 +1,15 @@
-import React, { useContext, useEffect, useState } from "react";
-import { FaStar } from "react-icons/fa";
+import React, { useContext, useState } from "react";
+import { FaStar, FaStarHalfAlt, FaRegStar } from "react-icons/fa";
 import "../Template/shine/dist/css/CommentForm.css";
+import "../Template/shine/dist/css/StarCommentRate.css";
 import { authApi, endpoints } from "../Config/APIs";
 import { MyUserContext } from "../Config/contexts";
 import { useNavigate } from "react-router-dom";
 
-function CommentForm({ selected_product_id }) {
+function CommentForm({ selected_product_id, loadInfoDetailsOfProduct }) {
   const [content, setContent] = useState("");
   const [star, setStar] = useState(0);
+  const [hoverStar, setHoverStar] = useState(null); // For hover functionality
   const [selectedFiles, setSelectedFiles] = useState([]);
   const { user } = useContext(MyUserContext);
   const navigate = useNavigate();
@@ -27,6 +29,7 @@ function CommentForm({ selected_product_id }) {
 
     setSelectedFiles((prev) => [...prev, ...validFiles]);
   };
+
   const handleRemoveFile = (fileIndex) => {
     setSelectedFiles((prev) => prev.filter((_, index) => index !== fileIndex));
   };
@@ -49,8 +52,8 @@ function CommentForm({ selected_product_id }) {
       formData.append("content", content);
       formData.append("star", star);
 
-      selectedFiles.forEach((File) => {
-        formData.append("files", File); // Use a consistent field name
+      selectedFiles.forEach((file) => {
+        formData.append("files", file); // Use a consistent field name
       });
 
       const url = `${endpoints["add-comment"](selected_product_id)}`;
@@ -66,7 +69,8 @@ function CommentForm({ selected_product_id }) {
       setContent("");
       setStar(0);
       setSelectedFiles([]);
-      navigate("/");
+      navigate(`/products/${selected_product_id}/info-details`);
+      loadInfoDetailsOfProduct();
     } catch (err) {
       console.error("Failed to add comment:", err);
       alert("Failed to add comment. Please try again.");
@@ -88,14 +92,37 @@ function CommentForm({ selected_product_id }) {
 
       <div className="form-group">
         <label>Rate this product</label>
-        <div className="stars">
-          {[...Array(5)].map((_, i) => (
-            <FaStar
-              key={i}
-              className={`star ${i < star ? "active" : ""}`}
-              onClick={() => setStar(i + 1)}
-            />
-          ))}
+        <div
+          className="stars"
+          onMouseLeave={() => setHoverStar(null)} // Reset hover on mouse leave
+        >
+          {[...Array(5)].map((_, i) => {
+            const fullValue = i + 1; // Full star value
+            const halfValue = i + 0.5; // Half star value
+
+            const isActive = hoverStar
+              ? hoverStar >= fullValue
+              : star >= fullValue;
+            const isHalfActive = hoverStar
+              ? hoverStar >= halfValue && hoverStar < fullValue
+              : star >= halfValue && star < fullValue;
+
+            return (
+              <span
+                key={i}
+                onMouseEnter={() => setHoverStar(fullValue)}
+                onClick={() => setStar(fullValue)}
+              >
+                {isActive ? (
+                  <FaStar className="star active" />
+                ) : isHalfActive ? (
+                  <FaStarHalfAlt className="star half-active" />
+                ) : (
+                  <FaRegStar className="star" />
+                )}
+              </span>
+            );
+          })}
         </div>
       </div>
 

@@ -43,11 +43,17 @@
 }
 
 .star {
-  color: gray; /* Default color for inactive stars */
+  color: #ccc; /* Default color */
+  cursor: pointer;
 }
 
 .star.active {
-  color: yellow; /* Color for active stars */
+  color: #ffd700; /* Active full star color */
+}
+
+.star.half-active {
+  color: #ffd700; /* Active half star color */
+  position: relative;
 }
 
 .comment-form .form-group input[type="file"] {

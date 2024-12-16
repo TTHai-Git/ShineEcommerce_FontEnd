@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import "../Template/shine/dist/css/core.min.css";
 import "../Template/shine/dist/css/main.min.css";
 import APIs, { endpoints } from "../Config/APIs";
+import moment from "moment";
 
 function Register() {
   const [user, setUser] = useState({
@@ -18,7 +19,7 @@ function Register() {
     avatar: null,
     dob: "", // Initialize dob as an empty string
   });
-
+  const [isLoading, setIsLoading] = useState(false);
   const [err, setErr] = useState(false);
   const navigate = useNavigate();
 
@@ -37,8 +38,9 @@ function Register() {
           form.append(key, user[key]);
         }
       }
-
+      console.log(form);
       try {
+        setIsLoading(true);
         let res = await APIs.post(endpoints["register"], form, {
           headers: {
             "Content-Type": "multipart/form-data",
@@ -51,6 +53,8 @@ function Register() {
         }
       } catch (ex) {
         console.error(ex);
+      } finally {
+        setIsLoading(false);
       }
     }
   };
@@ -100,7 +104,7 @@ function Register() {
                 <input
                   type="date"
                   name="dob"
-                  value={user.dob}
+                  value={moment(user.dob).format("YYYY-MM-DD")}
                   onChange={handleChange}
                 />
               </div>
@@ -180,7 +184,9 @@ function Register() {
                 />
               </div>
               <div className="form-btn">
-                <button type="submit">Đăng ký</button>
+                <button type="submit" disabled={isLoading}>
+                  {isLoading ? "Đang đăng ký..." : "Đăng ký"}
+                </button>
               </div>
               <div className="btn-dangky">
                 <Link to="/login">Quay Trở Về Đăng Nhập</Link>

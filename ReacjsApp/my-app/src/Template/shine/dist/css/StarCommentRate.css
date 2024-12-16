@@ -1,0 +1,11 @@
+.star {
+  color: #ccc; /* Default color */
+  cursor: pointer;
+}
+.star.active {
+  color: #ffd700; /* Active full star color */
+}
+.star.half-active {
+  color: #ffd700; /* Active half star color */
+  position: relative;
+}

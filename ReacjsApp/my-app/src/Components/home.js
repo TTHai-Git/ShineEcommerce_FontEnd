@@ -4,6 +4,7 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import "../Template/shine/dist/css/core.min.css";
 import "../Template/shine/dist/css/main.min.css";
+import "../Template/shine/dist/css/StarRate.css";
 import banner_1 from "../Template/shine/dist/img/home/banner-1.png";
 import banner_2 from "../Template/shine/dist/img/home/banner-2.png";
 import banner_3 from "../Template/shine/dist/img/home/banner-3.png";
@@ -12,6 +13,8 @@ import {
   FaShoppingBasket,
   FaEye,
   FaStar,
+  FaStarHalfAlt,
+  FaRegStar,
   FaPhoneAlt,
   FaArrowUp,
 } from "react-icons/fa";
@@ -140,10 +143,24 @@ function Home() {
             </span>
           </div>
           <div className="flex">
-            <div className="rate" data-rate="3">
-              {[...Array(5)].map((_, i) => (
-                <FaStar key={i} />
-              ))}
+            <div className="rate" data-rate="5">
+              <div className="stars">
+                {[...Array(5)].map((_, i) => {
+                  const rating = product.star_comment_rate;
+                  if (i < Math.floor(rating)) {
+                    // Full star
+                    return <FaStar key={i} className="star active" />;
+                  } else if (i < rating) {
+                    // Half star
+                    return (
+                      <FaStarHalfAlt key={i} className="star half-active" />
+                    );
+                  } else {
+                    // Empty star
+                    return <FaRegStar key={i} className="star" />;
+                  }
+                })}
+              </div>
             </div>
             <div className="cart-button">
               <Link

@@ -156,7 +156,7 @@ function Footer() {
                   rel="noopener noreferrer"
                 >
                   {" "}
-                  Cánh Cam
+                  Trịnh Thanh Hải
                 </a>
                 .
               </p>
